@@ -59,23 +59,20 @@ def guardar_imagen_float(nombre_imagen, image):
 Función para calcular el histograma de una imagen de forma manual
 '''
 def histogram(inImage, bins, min_range=0.0, max_range=1.0):
-    # Inicializar el histograma con ceros
-    hist = np.zeros(bins, dtype=int)
 
-    # Calcular el tamaño del bin para el rango especificado
-    bin_size = (max_range - min_range) / bins
+    hist = np.zeros(bins, dtype=int) #Histograma con 0
 
-    # Recorrer la imagen y calcular el histograma
+    bin_size = (max_range - min_range) / bins   #Tamaño del bin
+
     for pixel in inImage.flatten():
-        # Ajustar el valor del píxel al rango [min_range, max_range]
-        if min_range <= pixel <= max_range:
+        
+        if min_range <= pixel <= max_range: #Omitir pixeles con valores fuera del rango
             bin_index = int((pixel - min_range) // bin_size)
-            if bin_index == bins:  # Caso en el que pixel == max_range
+            if bin_index == bins:  #Caso en el que pixel == max_range
                 bin_index = bins - 1
             hist[bin_index] += 1
 
-    # Calcular los límites de los bins
-    bin_edges = np.linspace(min_range, max_range, bins + 1)
+    bin_edges = np.linspace(min_range, max_range, bins + 1) #Calcular los límites de los bins, +1 para limite superior
 
     return hist, bin_edges
 
