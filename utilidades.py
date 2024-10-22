@@ -2,6 +2,7 @@ import cv2
 from skimage import io
 import numpy as np
 from configuracion import INPUT_IMAGES, OUTPUT_IMAGES
+import matplotlib.pyplot as plt
 
 def load_image(nombre_imagen):
 
@@ -76,3 +77,11 @@ def histogram(inImage, bins, min_range=0.0, max_range=1.0):
 
     return hist, bin_edges
 
+# Función para plotear el histograma
+def plot_histogram(hist, bin_edges, title='Histogram'):
+    plt.figure(figsize=(8, 6))
+    plt.bar(bin_edges[:-1], hist, width=np.diff(bin_edges), edgecolor='black', align='edge')
+    plt.title(title)
+    plt.xlabel('Pixel intensity')
+    plt.ylabel('Frequency')
+    plt.show()
