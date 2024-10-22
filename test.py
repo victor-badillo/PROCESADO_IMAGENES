@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from utilidades import cargar_imagen, guardar_imagen_int, guardar_imagen_float
+from utilidades import cargar_imagen, guardar_imagen_int, guardar_imagen_float, visualizar_imagen_int, visualizar_imagen_float
 from src import adjustIntensity, equalizeIntensity, filterImage, gaussKernel1D, gaussianFilter, medianFilter, erode, dilate, opening, closing, fill, gradientImage, LoG, edgeCanny
 from configuracion import INPUT_IMAGES
 import cv2
@@ -14,6 +14,8 @@ def test_adjust_intensity():
 
     #Caso 1:uso de parámetros por defecto
     out_image_default = adjustIntensity(in_image)
+    #visualizar_imagen_float(image_name_ext, out_image_default)
+    visualizar_imagen_int(image_name_ext, out_image_default)
     guardar_imagen_int(f'{image_name_ext}_adjust_default.png', out_image_default)
 
     #Caso 2:ajuste del rango de intensidad de entrada
@@ -669,7 +671,7 @@ def test_edgeCanny():
 
 
 if __name__ == "__main__":
-    #test_adjust_intensity()
+    test_adjust_intensity()
     #test_equalize_intensity()
     #test_filterImage()
     #test_gaussKernel1D()
@@ -684,4 +686,4 @@ if __name__ == "__main__":
     #test_fill()
     #test_gradientImage()
     #test_LoG()
-    test_edgeCanny()
+    #test_edgeCanny()
