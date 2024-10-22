@@ -37,7 +37,8 @@ def equalizeIntensity(inImage, nBins=DEFAULT_NBINS):
     outImage = np.interp(inImage.flatten(), bin_edges[:-1], cdf_normalized)  #Usar los límites de los bins, el ultimo no representa un limite inferior
     outImage = outImage.reshape(inImage.shape)  #Devolver forma original a la imagen modificada
 
-    outImage = np.clip(outImage, 0, 1)  #Asegurar valores dentro del rango [0, 1]
+    #outImage = np.clip(outImage, 0, 1)  #Asegurar valores dentro del rango [0, 1]
+    outImage = adjustIntensity(outImage)
 
     return outImage
 
