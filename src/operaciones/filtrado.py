@@ -6,9 +6,6 @@ kernel arbitrario que se le pasa como parámetro
 No renormaliza
 '''
 def filterImage(inImage, kernel):
-    # Validar que el kernel tenga un tamaño impar
-    if kernel.shape[0] % 2 == 0 or kernel.shape[1] % 2 == 0:
-        raise ValueError("El kernel debe tener un tamaño impar (P x Q).")
 
     # Obtener el tamaño del kernel
     P, Q = kernel.shape
@@ -98,9 +95,6 @@ Función que implementa el filtro de medianas bidimensional, especificando el ta
 No renormaliza
 '''
 def medianFilter(inImage, filterSize):
-    # Validar que el tamaño del filtro sea impar
-    if filterSize % 2 == 0:
-        raise ValueError("El tamaño del filtro debe ser un valor impar.")
 
     # Calcular el padding necesario
     pad = filterSize // 2

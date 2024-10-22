@@ -3,7 +3,7 @@ from skimage import io
 import numpy as np
 from configuracion import INPUT_IMAGES, OUTPUT_IMAGES
 
-def cargar_imagen(nombre_imagen):
+def load_image(nombre_imagen):
 
     img_path = INPUT_IMAGES + nombre_imagen
     #Cargar la imagen en escala de grises
@@ -58,24 +58,24 @@ def guardar_imagen_float(nombre_imagen, image):
 '''
 Función para calcular el histograma de una imagen de forma manual
 '''
-def histogram(inImage, bins, rango_min=0.0, rango_max=1.0):
+def histogram(inImage, bins, min_range=0.0, max_range=1.0):
     # Inicializar el histograma con ceros
     hist = np.zeros(bins, dtype=int)
 
     # Calcular el tamaño del bin para el rango especificado
-    bin_size = (rango_max - rango_min) / bins
+    bin_size = (max_range - min_range) / bins
 
     # Recorrer la imagen y calcular el histograma
     for pixel in inImage.flatten():
-        # Ajustar el valor del píxel al rango [rango_min, rango_max]
-        if rango_min <= pixel <= rango_max:
-            bin_index = int((pixel - rango_min) // bin_size)
-            if bin_index == bins:  # Caso en el que pixel == rango_max
+        # Ajustar el valor del píxel al rango [min_range, max_range]
+        if min_range <= pixel <= max_range:
+            bin_index = int((pixel - min_range) // bin_size)
+            if bin_index == bins:  # Caso en el que pixel == max_range
                 bin_index = bins - 1
             hist[bin_index] += 1
 
     # Calcular los límites de los bins
-    bin_edges = np.linspace(rango_min, rango_max, bins + 1)
+    bin_edges = np.linspace(min_range, max_range, bins + 1)
 
     return hist, bin_edges
 

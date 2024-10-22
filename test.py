@@ -1,21 +1,20 @@
 import numpy as np
 import os
-from utilidades import cargar_imagen, guardar_imagen_int, guardar_imagen_float, visualizar_imagen_int, visualizar_imagen_float
+from utilidades import load_image, guardar_imagen_int, guardar_imagen_float, visualizar_imagen_int, visualizar_imagen_float
 from src import adjustIntensity, equalizeIntensity, filterImage, gaussKernel1D, gaussianFilter, medianFilter, erode, dilate, opening, closing, fill, gradientImage, LoG, edgeCanny
 from configuracion import INPUT_IMAGES
 import cv2
 
-def test_adjust_intensity():
+def test_adjustIntensity():
 
     image_name = os.path.basename(INPUT_IMAGES + 'grays.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
-    in_image = cargar_imagen(image_name)
+    in_image = load_image(image_name)
 
     #Caso 1:uso de parámetros por defecto
     out_image_default = adjustIntensity(in_image)
     #visualizar_imagen_float(image_name_ext, out_image_default)
-    visualizar_imagen_int(image_name_ext, out_image_default)
     guardar_imagen_int(f'{image_name_ext}_adjust_default.png', out_image_default)
 
     #Caso 2:ajuste del rango de intensidad de entrada
@@ -42,10 +41,11 @@ def test_equalize_intensity():
     image_name = os.path.basename(INPUT_IMAGES + 'eq0.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
-    in_image = cargar_imagen(image_name)
+    in_image = load_image(image_name)
 
     #Caso 1:uso de parámetros por defecto
     out_image_default = equalizeIntensity(in_image)
+    #visualizar_imagen_float(image_name_ext, out_image_default)
     guardar_imagen_int(f'{image_name_ext}_equalize_default.png', out_image_default)
 
     #Caso 2:uso de un número menor de bins
@@ -66,7 +66,7 @@ def test_filterImage():
 
     image_name = os.path.basename(INPUT_IMAGES + 'grays.png')
     image_name_ext = os.path.splitext(image_name)[0]
-    in_image = cargar_imagen(image_name)
+    in_image = load_image(image_name)
 
     kernels = {
         "average_3x3": np.array([[1, 1, 1],
@@ -173,7 +173,7 @@ def test_gaussianFilter():
     image_name_ext = os.path.splitext(image_name)[0]
 
     # Test con diferentes valores de sigma
-    inImage = cargar_imagen(image_name)
+    inImage = load_image(image_name)
     sigma_values = [0.5, 1.0, 2.0, 3.0]
     for sigma in sigma_values:
         outImage = gaussianFilter(inImage, sigma)
@@ -215,7 +215,7 @@ def test_medianFilter():
     image_name = os.path.basename(INPUT_IMAGES + 'image2.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
-    inImage = cargar_imagen(image_name)
+    inImage = load_image(image_name)
     for filterSize in [3, 5, 7, 9, 11, 23, 53]:
         outImage = medianFilter(inImage, filterSize)
         outImage = np.clip(outImage, 0, 1)
@@ -255,7 +255,7 @@ def test_erode():
 
     for image in images:
         
-        inputImage = cargar_imagen(image)
+        inputImage = load_image(image)
 
         for se in SEs:
             outImage = erode(inputImage, se)
@@ -268,7 +268,7 @@ def test_erode():
     image_name_ext = os.path.splitext(image_name)[0]
 
     # Caso 1: Erosión con un EE 3x3 y centro predeterminado
-    inputImage = cargar_imagen(image_name)  # Cargar imagen de prueba
+    inputImage = load_image(image_name)  # Cargar imagen de prueba
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
@@ -314,7 +314,7 @@ def test_dilate():
     image_name = os.path.basename(INPUT_IMAGES + 'morph.png')
     image_name_ext = os.path.splitext(image_name)[0]
     # Caso 1: Dilatación con un EE 3x3 y centro predeterminado
-    inputImage = cargar_imagen(image_name)  # Cargar imagen de prueba
+    inputImage = load_image(image_name)  # Cargar imagen de prueba
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
@@ -357,7 +357,7 @@ def test_opening():
     image_name = os.path.basename(INPUT_IMAGES + 'morph.png')
     image_name_ext = os.path.splitext(image_name)[0]
     # Caso 1: Opening con un EE 3x3 y centro predeterminado
-    inputImage = cargar_imagen(image_name)  # Cargar imagen de prueba
+    inputImage = load_image(image_name)  # Cargar imagen de prueba
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
@@ -400,7 +400,7 @@ def test_closing():
     image_name = os.path.basename(INPUT_IMAGES + 'morph.png')
     image_name_ext = os.path.splitext(image_name)[0]
     # Caso 1: Closing con un EE 3x3 y centro predeterminado
-    inputImage = cargar_imagen(image_name)  # Cargar imagen de prueba
+    inputImage = load_image(image_name)  # Cargar imagen de prueba
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
@@ -444,7 +444,7 @@ def test_closing_cv2():
     image_name_ext = os.path.splitext(image_name)[0]
     
     # Cargar imagen de prueba
-    inputImage = cargar_imagen(image_name)
+    inputImage = load_image(image_name)
 
     # Definir el elemento estructurante (EE) 3x3
     SE_square = np.array([[1, 1, 1],
@@ -483,7 +483,7 @@ def test_opening_cv2():
     image_name_ext = os.path.splitext(image_name)[0]
 
     # Cargar imagen de prueba
-    inputImage = cargar_imagen(image_name)
+    inputImage = load_image(image_name)
 
     # Definir el elemento estructurante (EE) 3x3
     SE_square = np.array([[1, 1, 1],
@@ -521,7 +521,7 @@ def test_fill():
     # Cargar la imagen binaria de prueba
     image_name = os.path.basename(INPUT_IMAGES + 'B.png')
     image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = cargar_imagen(image_name)  # Cargar la imagen 
+    inputImage = load_image(image_name)  # Cargar la imagen 
     
     # Caso 1: Fill con un EE por defecto y una semilla
     seeds = [(13, 9)]
@@ -564,9 +564,9 @@ def test_fill():
 
 def test_gradientImage():
     # Cargar la imagen de prueba
-    image_name = os.path.basename(INPUT_IMAGES + 'circles1.png')  # Asegúrate de que la imagen esté en esta ruta
+    image_name = os.path.basename(INPUT_IMAGES + 'circleWhite.png')  # Asegúrate de que la imagen esté en esta ruta
     image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = cargar_imagen(image_name)  # Cargar la imagen
+    inputImage = load_image(image_name)  # Cargar la imagen
 
     # Caso 1: Aplicar el operador Roberts
     gx_roberts, gy_roberts = gradientImage(inputImage, 'Roberts')
@@ -609,7 +609,7 @@ def test_LoG():
     # Cargar la imagen de prueba
     image_name = os.path.basename(INPUT_IMAGES + 'image2.png')
     image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = cargar_imagen(image_name)  # Cargar la imagen 
+    inputImage = load_image(image_name)  # Cargar la imagen 
 
     # Caso 1: Aplicar LoG con un valor de sigma específico
     sigma_1 = 1.0
@@ -646,7 +646,7 @@ def test_edgeCanny():
     # Cargar la imagen de prueba
     image_name = os.path.basename(INPUT_IMAGES + 'circles1.png')  # Cambia 'test_image.png' por el nombre de tu imagen
     image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = cargar_imagen(image_name)  # Cargar la imagen
+    inputImage = load_image(image_name)  # Cargar la imagen
 
     # Definir diferentes parámetros para probar
     test_cases = [
@@ -671,7 +671,7 @@ def test_edgeCanny():
 
 
 if __name__ == "__main__":
-    test_adjust_intensity()
+    test_adjustIntensity()
     #test_equalize_intensity()
     #test_filterImage()
     #test_gaussKernel1D()
