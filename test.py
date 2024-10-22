@@ -58,78 +58,7 @@ def test_equalize_intensity():
 
     print("Las imágenes ecualizadas han sido guardadas con éxito.")
 
-'''
-def test_filterImage():
 
-    in_image = cargar_imagen('circles.png')
-
-    kernels = {
-        "average_3x3": np.array([[1, 1, 1],
-                                  [1, 1, 1],
-                                  [1, 1, 1]]) / 9,  # Kernel de suavizado (promedio) 3x3
-        
-        "sharp": np.array([[0, -1, 0],
-                           [-1, 5, -1],
-                           [0, -1, 0]]),  # Kernel de agudización
-        
-        "edge": np.array([[-1, -1, -1],
-                          [-1,  8, -1],
-                          [-1, -1, -1]]),  # Kernel de detección de bordes
-        
-        "identity": np.array([[0, 0, 0],
-                              [0, 1, 0],
-                              [0, 0, 0]]),  # Kernel de identidad
-        
-        "average_5x5": np.array([[1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1]]) / 25,  # Kernel de suavizado (promedio) 5x5
-        
-        "average_7x7": np.array([[1, 1, 1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1, 1, 1]]) / 49,  # Kernel de suavizado (promedio) 7x7
-        
-        "sobel_x": np.array([[-1, 0, 1],
-                             [-2, 0, 2],
-                             [-1, 0, 1]]),  # Kernel de Sobel para detección de bordes en dirección X
-
-        "sobel_y": np.array([[1, 2, 1],
-                             [0, 0, 0],
-                             [-1, -2, -1]])  # Kernel de Sobel para detección de bordes en dirección Y
-    }
-
-    for kernel_name, kernel in kernels.items():
-
-        out_image = filterImage(in_image, kernel)
-        guardar_imagen_int(f'grays_{kernel_name}.png', out_image)
-
-        assert out_image.shape == in_image.shape, f"La imagen de salida para el kernel {kernel_name} no tiene el mismo tamaño que la de entrada."
-
-        if kernel_name == "identity":
-            assert np.array_equal(out_image, in_image), "La imagen de salida debería ser idéntica a la imagen de entrada para el kernel de identidad."
-
-    
-    #Probar con un kernel de tamaño par (debería lanzar un error)    
-    try:
-        invalid_kernel = np.array([[1, 1],
-                                   [1, 1]])
-        filterImage(in_image, invalid_kernel)
-    except ValueError as e:
-        print(e)
-
-    #Probar con una imagen de todos ceros
-    zero_image = np.zeros_like(in_image)
-    out_zero_image = filterImage(zero_image, kernel)
-    assert np.all(out_zero_image == 0), "La imagen de salida debería ser toda ceros."
-
-    print("Todas las pruebas con múltiples kernels han pasado con éxito.")
-
-'''
     
 def test_filterImage():
 
