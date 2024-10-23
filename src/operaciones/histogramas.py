@@ -25,6 +25,8 @@ def adjustIntensity(inImage, inRange=DEFAULT_INRANGE, outRange=DEFAULT_OUTRANGE)
 '''
 
 '''
+Funcion para ajustar la intensidad de una imagen
+
 outImage = adjustIntensity (inImage, inRange=[], outRange=[0 1])
     inImage: Matriz MxN con la imagen de entrada.
     outImage: Matriz MxN con la imagen de salida.
@@ -53,6 +55,8 @@ def adjustIntensity(inImage, inRange=DEFAULT_INRANGE, outRange=DEFAULT_OUTRANGE)
 
 
 '''
+Funcion para ecualizar el histograma de una imagen
+
 outImage = equalizeIntensity (inImage, nBins=256)
     inImage, outImage: ...
     nBins: Número de bins utilizados en el procesamiento. Se asume que el intervalo de
