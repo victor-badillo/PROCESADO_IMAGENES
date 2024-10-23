@@ -58,15 +58,16 @@ outImage = LoG (inImage, sigma)
     sigma: Parámetro sigma de la Gaussiana
 '''
 def LoG(inImage, sigma):
-    # Paso 1: Suavizar la imagen utilizando el filtro gaussiano
+    
+    #Suavizar la imagen con un filtro gaussiano
     smoothedImage = gaussianFilter(inImage, sigma)
     
-    # Paso 2: Definir el kernel Laplaciano
+    #Kernel laplaciano
     laplacianKernel = np.array([[0, 1, 0],
                                 [1, -4, 1],
                                 [0, 1, 0]], dtype=np.float64)
     
-    # Paso 3: Aplicar la convolución de la imagen suavizada con el kernel Laplaciano
+    #Filtrar imagen suavizada con kernel laplaciano
     outImage = filterImage(smoothedImage, laplacianKernel)
     
     return outImage

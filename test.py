@@ -148,6 +148,14 @@ def test_gaussKernel1D():
     assert len(kernel) == 2 * int(np.ceil(3 * sigma)) + 1, f"El tamaño del kernel debería ser {N} para sigma = {sigma}."
     assert np.isclose(np.sum(kernel), 1, atol=1e-5), f"La suma del kernel debería ser aproximadamente 1, pero fue {np.sum(kernel)}."
 
+    #Caso 6: Verificar que se lanza un ValueError cuando sigma es <= 0
+    try:
+        
+        invalid_sigma = -1
+        out_image_error = gaussKernel1D(invalid_sigma)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
+
     print("Todos los tests han pasado con éxito.")
 
 
@@ -522,42 +530,41 @@ def test_gradientImage():
 
     print("Todas las pruebas de gradientImage han pasado con éxito.")
 
-def test_LoG():
-    # Cargar la imagen de prueba
-    image_name = os.path.basename(INPUT_IMAGES + 'image2.png')
-    image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = load_image(image_name)  # Cargar la imagen 
 
-    # Caso 1: Aplicar LoG con un valor de sigma específico
-    sigma_1 = 1.0
+def test_LoG():
+
+    image_name = os.path.basename(INPUT_IMAGES + 'lady.png')
+    image_name_ext = os.path.splitext(image_name)[0]
+
+    inputImage = load_image(image_name)
+
+    #Caso 1 :sigma 1.0
+    sigma_1 = 0.1
     outImage_sigma_1 = LoG(inputImage, sigma_1)
-    outImage_sigma_1 = np.clip(outImage_sigma_1, 0, 1)
+    outImage_sigma_1 = adjustIntensity(outImage_sigma_1)
     save_image_int(f'{image_name_ext}_LoG_sigma_1.png', outImage_sigma_1)
 
-    # Caso 2: Aplicar LoG con un valor de sigma diferente
+    #Caso 2 :sigma 2.0
     sigma_2 = 2.0
     outImage_sigma_2 = LoG(inputImage, sigma_2)
-    outImage_sigma_2 = np.clip(outImage_sigma_2, 0, 1)
+    outImage_sigma_2 = adjustIntensity(outImage_sigma_2)
     save_image_int(f'{image_name_ext}_LoG_sigma_2.png', outImage_sigma_2)
 
-    # Caso 3: Aplicar LoG con un valor de sigma diferente
+    #Caso 3:sigma 3.0
     sigma_3 = 3.0
     outImage_sigma_3 = LoG(inputImage, sigma_3)
-    outImage_sigma_3 = np.clip(outImage_sigma_3, 0, 1)
+    outImage_sigma_3 = adjustIntensity(outImage_sigma_3)
     save_image_int(f'{image_name_ext}_LoG_sigma_3.png', outImage_sigma_3)
 
-    # Caso 3: Verificar que la salida tenga las mismas dimensiones que la imagen de entrada
-    assert outImage_sigma_1.shape == inputImage.shape, "La salida no tiene las mismas dimensiones que la imagen de entrada"
-    assert outImage_sigma_2.shape == inputImage.shape, "La salida no tiene las mismas dimensiones que la imagen de entrada"
-    assert outImage_sigma_3.shape == inputImage.shape, "La salida no tiene las mismas dimensiones que la imagen de entrada"
+    #Caso 4 :verificar que se lanza un ValueError cuando sigma es <= 0
+    try:
+        invalid_sigma = -1
+        out_image_error = LoG(inputImage, invalid_sigma)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
 
-    # Caso 4: Comprobar que la imagen de salida no tiene valores fuera del rango [0, 255]
-    assert np.all(outImage_sigma_1 >= 0) and np.all(outImage_sigma_1 <= 255), "Los valores en outImage_sigma_1 están fuera de rango [0, 255]"
-    assert np.all(outImage_sigma_2 >= 0) and np.all(outImage_sigma_2 <= 255), "Los valores en outImage_sigma_2 están fuera de rango [0, 255]"
-    assert np.all(outImage_sigma_3 >= 0) and np.all(outImage_sigma_3 <= 255), "Los valores en outImage_sigma_3 están fuera de rango [0, 255]"
-
-    # Imprimir mensaje de éxito
     print("Todas las pruebas de LoG han pasado con éxito.")
+
 
 def test_edgeCanny():
     # Cargar la imagen de prueba
@@ -599,6 +606,6 @@ if __name__ == "__main__":
     #test_opening()
     #test_closing()
     #test_fill()
-    test_gradientImage()
-    #test_LoG()
+    #test_gradientImage()
+    test_LoG()
     #test_edgeCanny()

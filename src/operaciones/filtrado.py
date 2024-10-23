@@ -44,6 +44,9 @@ kernel = gaussKernel1D (sigma)
 '''
 def gaussKernel1D(sigma):
 
+    if sigma <= 0:
+        raise ValueError('El valor de sigma debe ser mayor que 0')
+
     N = 2 * int(np.ceil(3 * sigma)) + 1
     kernel = np.zeros(N)
     center = N // 2
