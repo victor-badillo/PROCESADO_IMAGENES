@@ -1,24 +1,29 @@
 import cv2
-from skimage import io
 import numpy as np
 from configuracion import INPUT_IMAGES, OUTPUT_IMAGES
 import matplotlib.pyplot as plt
 
+'''
+Funcion para cargar imagenes en escala de grises y float64
+'''
 def load_image(nombre_imagen):
 
     img_path = INPUT_IMAGES + nombre_imagen
-    #Cargar la imagen en escala de grises
-    inImage = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+   
+    inImage = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)    #Escala de grises
     
     if inImage is None:
         raise FileNotFoundError(f"No se pudo cargar la imagen: {img_path}")
     
-    #Convertir a tipo de dato flotante y normalizar al rango [0, 1]
+    #Convertir a tipo float64 y normalizar al rango [0, 1]
     inImage = inImage.astype(np.float64) / 255.0
     
     return inImage
 
 
+'''
+Funcion para visualizar imagen, imagen [0,255]
+'''
 def visualizar_imagen_int(title, image):
     
     cv2.imshow(title, (image * 255).astype(np.uint8) )
@@ -26,18 +31,22 @@ def visualizar_imagen_int(title, image):
     cv2.destroyAllWindows()
 
 
+'''
+Funcion para visualizar imagen, imagen [0,1]
+'''
 def visualizar_imagen_float(title, image):
     
     cv2.imshow(title, image )
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-
-#CREO QUE TENGO QUE CAMBIARLA Y GUARDAR EN RANGO [0, 1]
+'''
+Funcion para guardar imagen, imagen [0,255]
+'''
 def guardar_imagen_int(nombre_imagen, image):
 
     img_path = OUTPUT_IMAGES + nombre_imagen
-    success = cv2.imwrite(img_path,(image * 255).astype(np.uint8))  # Guardar la imagen ajustada
+    success = cv2.imwrite(img_path,(image * 255).astype(np.uint8))
 
     if success:
         print("La imagen ==> " + nombre_imagen + " ==> se guardó correctamente.")
@@ -45,10 +54,13 @@ def guardar_imagen_int(nombre_imagen, image):
         print("Error al guardar la imagen ==>" + img_path)
 
 
+'''
+Funcion para guardar imagen, imagen [0,1]
+'''
 def guardar_imagen_float(nombre_imagen, image):
 
     img_path = OUTPUT_IMAGES + nombre_imagen
-    success = cv2.imwrite(img_path,image)  # Guardar la imagen ajustada
+    success = cv2.imwrite(img_path,image)
 
     if success:
         print("La imagen ==> " + nombre_imagen + " ==> se guardó correctamente.")
@@ -77,7 +89,9 @@ def histogram(inImage, bins, min_range=0.0, max_range=1.0):
 
     return hist, bin_edges
 
-# Función para plotear el histograma
+'''
+Funcion para plotear el histograma de una imagen
+'''
 def plot_histogram(hist, bin_edges, title='Histogram'):
     plt.figure(figsize=(8, 6))
     plt.bar(bin_edges[:-1], hist, width=np.diff(bin_edges), edgecolor='black', align='edge')
