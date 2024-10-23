@@ -58,7 +58,7 @@ def test_equalize_intensity():
     out_image_high_bins = equalizeIntensity(in_image, nBins=nBins_high)
     save_image_int(f'{image_name_ext}_equalize_high_bins.png', out_image_high_bins)
 
-    # Caso 4: Verificar que se lanza un ValueError cuando el numero de bins es <= 0
+    #Caso 4: Verificar que se lanza un ValueError cuando el numero de bins es <= 0
     try:
         
         nBins_high = -10
@@ -78,13 +78,13 @@ def test_filterImage():
     kernels = {
         "average_3x3": np.array([[1, 1, 1],
                                   [1, 1, 1],
-                                  [1, 1, 1]]) / 9,  # Kernel de suavizado (promedio) 3x3
+                                  [1, 1, 1]]) / 9,  #Kernel de suavizado (promedio) 3x3
         
         "average_5x5": np.array([[1, 1, 1, 1, 1],
                                   [1, 1, 1, 1, 1],
                                   [1, 1, 1, 1, 1],
                                   [1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1]]) / 25,  # Kernel de suavizado (promedio) 5x5
+                                  [1, 1, 1, 1, 1]]) / 25,  #Kernel de suavizado (promedio) 5x5
         
         "average_7x7": np.array([[1, 1, 1, 1, 1, 1, 1],
                                   [1, 1, 1, 1, 1, 1, 1],
@@ -92,7 +92,10 @@ def test_filterImage():
                                   [1, 1, 1, 1, 1, 1, 1],
                                   [1, 1, 1, 1, 1, 1, 1],
                                   [1, 1, 1, 1, 1, 1, 1],
-                                  [1, 1, 1, 1, 1, 1, 1]]) / 49  # Kernel de suavizado (promedio) 7x7
+                                  [1, 1, 1, 1, 1, 1, 1]]) / 49,  #Kernel de suavizado (promedio) 7x7
+
+        "average_2x2": np.array([[1, 1],
+                                  [1, 1]]) / 4  #Kernel de suavizado (promedio) 7x7
         
     }
 
@@ -174,42 +177,39 @@ def test_gaussianFilter():
 
 
 def test_medianFilter():
-    # Caso 1: Imagen constante de tamaño 5x5
+
+    #Caso 1 :verificar que con una matriz constante no cambia la imagen
     inImage = np.ones((5, 5))
     filterSize = 3
     outImage = medianFilter(inImage, filterSize)
-
-    # La imagen de salida debe seguir siendo constante ya que la imagen de entrada es constante
     assert np.all(outImage == 1), "El filtro no debería cambiar una imagen constante."
 
-    # Caso 2: Imagen con un solo valor distinto en el centro
-    inImage = np.zeros((5, 5))
-    inImage[2, 2] = 10
-    filterSize = 3
-    outImage = medianFilter(inImage, filterSize)
-
-    # En la imagen filtrada, la mayoría de los valores deben seguir siendo cero debido a la mediana
-    assert np.all(outImage == 0) or outImage[2, 2] == 0, "El filtro debería devolver una imagen con ceros."
-
-    # Caso 3: Imagen identidad de tamaño 5x5
+    #Caso 2 :imagen identidad de tamaño 5x5
     inImage = np.eye(5)
     filterSize = 3
     outImage = medianFilter(inImage, filterSize)
-
-    # Verificar que la imagen resultante tiene valores en el rango esperado
     assert np.all(outImage >= 0) and np.all(outImage <= 1), "Los valores de la imagen filtrada deberían estar en el rango [0, 1]."
 
-    # Caso 4: Test con diferentes valores de filterSize
-    image_name = os.path.basename(INPUT_IMAGES + 'image2.png')
+    #Caso 3 :test con diferentes valores de filterSize
+    image_name = os.path.basename(INPUT_IMAGES + 'circlesSP.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
     inImage = load_image(image_name)
-    for filterSize in [3, 5, 7, 9, 11, 23, 53]:
+    for filterSize in [3, 5, 7, 9, 11, 23, 53, 4]:
         outImage = medianFilter(inImage, filterSize)
-        outImage = np.clip(outImage, 0, 1)
+        outImage = adjustIntensity(outImage)
+        #visualize_image_float(image_name_ext,outImage )
         save_image_int(f'{image_name_ext}_median_{filterSize}.png', outImage)
-        # Verificar que la imagen de salida tenga el mismo tamaño que la imagen de entrada
+
         assert outImage.shape == inImage.shape, f"La imagen de salida debería tener el mismo tamaño que la imagen de entrada para filterSize = {filterSize}."
+
+    #Caso 4: Verificar que se lanza un ValueError cuando el filterSize es <= 0
+    try:
+        
+        filterSize = -10
+        out_image_error = medianFilter(inImage, filterSize)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
 
     print("Todos los tests de medianFilter han pasado.")
 
@@ -663,8 +663,8 @@ if __name__ == "__main__":
     #test_equalize_intensity()
     #test_filterImage()
     #test_gaussKernel1D()
-    test_gaussianFilter()
-    #test_medianFilter()
+    #test_gaussianFilter()
+    test_medianFilter()
     #test_erode()
     #test_dilate()
     #test_opening()

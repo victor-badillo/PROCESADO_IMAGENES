@@ -94,24 +94,22 @@ outImage = medianFilter (inImage, filterSize)
 '''
 def medianFilter(inImage, filterSize):
 
-    # Calcular el padding necesario
+    if filterSize <= 0:
+        raise ValueError("filterSize debe ser mayor que 0")
+
     pad = filterSize // 2
 
-    # Añadir padding a la imagen utilizando el modo 'reflect'
+    #Añadir padding con modo reflect
     paddedImage = np.pad(inImage, ((pad, pad), (pad, pad)), mode='reflect')
 
-    # Crear una imagen de salida inicializada a ceros
     outImage = np.zeros_like(inImage)
 
-    # Obtener las dimensiones de la imagen de entrada
-    rows, cols = inImage.shape
+    rows, cols = inImage.shape  #Obtener las dimensiones de la imagen de entrada
 
-    # Aplicar el filtro de mediana
+    #Calcular valor para cada pixel
     for i in range(rows):
         for j in range(cols):
-            # Extraer la región de interés (ventana de tamaño filterSize x filterSize)
             region = paddedImage[i:i + filterSize, j:j + filterSize]
-            # Calcular la mediana y asignarla al píxel correspondiente en la imagen de salida
             outImage[i, j] = np.median(region)
 
     return outImage
