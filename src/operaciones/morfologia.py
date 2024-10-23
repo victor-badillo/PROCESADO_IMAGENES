@@ -151,7 +151,6 @@ def closing(inImage, SE, center=DEFAULT_CENTER):
     return outImage
 
 
-# Rellenar regiones
 # Usar visualiza_int
 '''
 Implementar el algoritmo de llenado morfológico de regiones de una imagen, dado un
@@ -165,36 +164,36 @@ outImage = fill (inImage, seeds, SE=[], center=[])
 '''
 def fill(inImage, seeds, SE=DEFAULT_SE, center=DEFAULT_CENTER):
     
-    # Crear imagen binaria inicial (X0) con los puntos semilla
     outImage = np.zeros_like(inImage, dtype=np.uint8)
+
+    #Añadir semillas a la imagen vacia
     for seed in seeds:
-        outImage[seed[0], seed[1]] = 1  # Colocar las semillas en X0
+        outImage[seed[0], seed[1]] = 1
 
 
-    # Si no se proporciona el centro, se coloca en el centro del SE
+    #Calcular centro si no se especifica uno
     if not center:
         center = [SE.shape[0] // 2, SE.shape[1] // 2]
 
-    # Invertir la imagen de entrada para obtener el fondo (A^c)
-    
+    #Complementario de inImage
     inImageX = (inImage).astype(np.uint8) 
-    Ac = 1- inImageX
+    Ac = 1 - inImageX
 
     
     while True:
-        # Aplicar la dilatación
+
+        #Dilatacion
         prev_outImage = outImage.copy()
-        #outImage = cv2.dilate(outImage, SE, anchor=center)
         outImage = dilate(outImage, SE, center)
         
-        # Intersección con el fondo (A^c)
+        #Interseccion con el complemetario de inImage
         outImage = outImage & Ac
 
-        # Condición de terminación: si no hay cambios, detener
+        #Para de iterar si no hay cambios
         if np.array_equal(outImage, prev_outImage):
             break
 
-    # Unir la región final con la imagen original (Xk U A)    
+    #Unir resultado con imagen original 
     outImage = outImage | inImageX
     outImage = outImage.astype(inImage.dtype) #Volver al tipo original , float64
 

@@ -428,7 +428,7 @@ def test_closing():
     #Caso 2 :closing con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = closing(inputImage, SE_1x3)
-    visualize_image_float(image_name_ext, outImage_1x3)
+    #visualize_image_float(image_name_ext, outImage_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :closing con un SE vertical 3x1 y centro predeterminado
@@ -463,126 +463,49 @@ def test_closing():
     print("Todas las pruebas de closing han pasado con éxito.")
 
 
-def test_closing_cv2():
-    image_name = os.path.basename(INPUT_IMAGES + 'morph.png')
-    image_name_ext = os.path.splitext(image_name)[0]
-    
-    # Cargar imagen de prueba
-    inputImage = load_image(image_name)
-
-    # Definir el elemento estructurante (EE) 3x3
-    SE_square = np.array([[1, 1, 1],
-                          [1, 1, 1],
-                          [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
-
-    # Caso 1: Closing con un EE 3x3
-    outImage_default_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_CLOSE, SE_square)
-    save_image_int(f'{image_name_ext}_default_cv2.png', outImage_default_cv2)
-
-    # Caso 2: Closing con un EE personalizado (1x3)
-    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
-    outImage_1x3_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_CLOSE, SE_1x3)
-    save_image_int(f'{image_name_ext}_1x3_cv2.png', outImage_1x3_cv2)
-
-    # Caso 3: Closing con un EE personalizado (3x1)
-    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)  # EE vertical de 3x1
-    outImage_3x1_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_CLOSE, SE_3x1)
-    save_image_int(f'{image_name_ext}_3x1_cv2.png', outImage_3x1_cv2)
-
-    # Caso 4: Closing con un EE cuadrado 3x3 y un centro personalizado
-    custom_center = (1, 1)  # Centro en el medio
-    outImage_custom_center_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_CLOSE, SE_square)
-    save_image_int(f'{image_name_ext}_custom_center_cv2.png', outImage_custom_center_cv2)
-
-    # Caso 5: Closing con un EE 3x3 y un centro en la esquina inferior derecha
-    custom_center_edge = (2, 2)  # Centro en la esquina inferior derecha
-    outImage_edge_center_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_CLOSE, SE_square)
-    save_image_int(f'{image_name_ext}_edge_center_cv2.png', outImage_edge_center_cv2)
-
-    # Imprimir mensaje de éxito
-    print("Todas las pruebas de closing usando OpenCV han pasado con éxito.")
-
-def test_opening_cv2():
-    image_name = os.path.basename(INPUT_IMAGES + 'morph.png')
-    image_name_ext = os.path.splitext(image_name)[0]
-
-    # Cargar imagen de prueba
-    inputImage = load_image(image_name)
-
-    # Definir el elemento estructurante (EE) 3x3
-    SE_square = np.array([[1, 1, 1],
-                          [1, 1, 1],
-                          [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
-
-    # Caso 1: Opening con un EE 3x3
-    outImage_default_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_OPEN, SE_square)
-    save_image_int(f'{image_name_ext}_default_cv2.png', outImage_default_cv2)
-
-    # Caso 2: Opening con un EE personalizado (1x3)
-    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
-    outImage_1x3_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_OPEN, SE_1x3)
-    save_image_int(f'{image_name_ext}_1x3_cv2.png', outImage_1x3_cv2)
-
-    # Caso 3: Opening con un EE personalizado (3x1)
-    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)  # EE vertical de 3x1
-    outImage_3x1_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_OPEN, SE_3x1)
-    save_image_int(f'{image_name_ext}_3x1_cv2.png', outImage_3x1_cv2)
-
-    # Caso 4: Opening con un EE cuadrado 3x3 y un centro personalizado
-    custom_center = (1, 1)  # Centro en el medio (aunque OpenCV no utiliza el centro)
-    outImage_custom_center_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_OPEN, SE_square)
-    save_image_int(f'{image_name_ext}_custom_center_cv2.png', outImage_custom_center_cv2)
-
-    # Caso 5: Opening con un EE 3x3 y un centro en la esquina inferior derecha
-    custom_center_edge = (2, 2)  # Centro en la esquina inferior derecha (mismo caso que el anterior)
-    outImage_edge_center_cv2 = cv2.morphologyEx(inputImage, cv2.MORPH_OPEN, SE_square)
-    save_image_int(f'{image_name_ext}_edge_center_cv2.png', outImage_edge_center_cv2)
-
-    # Imprimir mensaje de éxito
-    print("Todas las pruebas de opening usando OpenCV han pasado con éxito.")
 
 def test_fill():
-    # Cargar la imagen binaria de prueba
+
     image_name = os.path.basename(INPUT_IMAGES + 'B.png')
     image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = load_image(image_name)  # Cargar la imagen 
     
-    # Caso 1: Fill con un EE por defecto y una semilla
+    inputImage = load_image(image_name)
+    
+    #Caso 1 :fill con un SE por defecto , centro por defecto y una semilla
     seeds = [(13, 9)]
     outImage_default = fill(inputImage, seeds)
+    #visualize_image_float(image_name_ext,outImage_default)
     save_image_int(f'{image_name_ext}_fill_default.png', outImage_default)
 
-    # Caso 2: Fill con varias semillas en diferentes agujeros de la letra 'B'
+    #Caso 2 :fill con varias semillas en diferentes agujeros de la letra 'B'
     seeds_multiple = [(14,9), (7,9)]
     outImage_multiple_seeds = fill(inputImage, seeds_multiple)
     save_image_int(f'{image_name_ext}_fill_multiple_seeds.png', outImage_multiple_seeds)
     
-    # Caso 3: Fill con un EE personalizado (por ejemplo, un EE de 1x3)
-    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
+    #Caso 3 :fill con un SE horizontal de 1x3
+    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     seeds = [(13, 9)]
     outImage_1x3 = fill(inputImage, seeds, SE=SE_1x3)
     save_image_int(f'{image_name_ext}_fill_1x3.png', outImage_1x3)
     
-    # Caso 4: Fill con un EE personalizado (EE vertical de 3x1)
-    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)  # EE vertical de 3x1
+    #Caso 4 :fill con un SE vertical 3x1
+    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)
     outImage_3x1 = fill(inputImage, seeds, SE=SE_3x1)
     save_image_int(f'{image_name_ext}_fill_3x1.png', outImage_3x1)
     
-    # Caso 5: Fill con un EE cuadrado 3x3 y un centro personalizado
-    #Este caso sale de la B por el centro del EE
-    SE_square = np.ones((3, 3), dtype=np.uint8)  # EE cuadrado 3x3
-    custom_center = [0, 2]  # Centro en el medio
+    #Caso 5 :fill con un SE cuadrado 3x3 y un centro personalizado
+    SE_square = np.ones((3, 3), dtype=np.uint8)
+    custom_center = [0, 2]
     outImage_custom_center = fill(inputImage, seeds, SE=SE_square, center=custom_center)
     save_image_int(f'{image_name_ext}_fill_custom_center.png', outImage_custom_center)
     
-    # Caso 6: Verificar que se lanza un ValueError cuando el centro está fuera de los límites
+    #Caso 6 :verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
-        invalid_center = [3, 1]  # Fuera de los límites para un EE 3x3
+        invalid_center = [3, 1]
         outImage_invalid_center = fill(inputImage, seeds, SE=SE_square, center=invalid_center)
     except ValueError as e:
         print(f"Prueba pasada: {e}")
     
-    # Imprimir mensaje de éxito
     print("Todas las pruebas de fill han pasado con éxito.")
 
 
@@ -704,10 +627,8 @@ if __name__ == "__main__":
     #test_erode()
     #test_dilate()
     #test_opening()
-    #test_opening_cv2()
-    test_closing()
-    #test_closing_cv2()
-    #test_fill()
+    #test_closing()
+    test_fill()
     #test_gradientImage()
     #test_LoG()
     #test_edgeCanny()
