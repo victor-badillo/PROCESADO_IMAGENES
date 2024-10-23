@@ -58,6 +58,14 @@ def test_equalize_intensity():
     out_image_high_bins = equalizeIntensity(in_image, nBins=nBins_high)
     save_image_int(f'{image_name_ext}_equalize_high_bins.png', out_image_high_bins)
 
+    # Caso 4: Verificar que se lanza un ValueError cuando el numero de bins es <= 0
+    try:
+        
+        nBins_high = -10
+        out_image_error = equalizeIntensity(in_image, nBins=nBins_high)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
+
     print("Las imágenes ecualizadas han sido guardadas con éxito.")
 
 
@@ -671,8 +679,8 @@ def test_edgeCanny():
 
 
 if __name__ == "__main__":
-    test_adjustIntensity()
-    #test_equalize_intensity()
+    #test_adjustIntensity()
+    test_equalize_intensity()
     #test_filterImage()
     #test_gaussKernel1D()
     #test_gaussianFilter()

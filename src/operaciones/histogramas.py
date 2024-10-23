@@ -65,6 +65,9 @@ outImage = equalizeIntensity (inImage, nBins=256)
 '''
 def equalizeIntensity(inImage, nBins=DEFAULT_NBINS):
 
+    if nBins <= 0:
+        raise ValueError("El numero de bins debe ser mayor que 0")
+
     #Calcular el histograma y los límites de los bins
     hist, bin_edges = histogram(inImage, bins=nBins, min_range=0.0, max_range=1.0)
 
