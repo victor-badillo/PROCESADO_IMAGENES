@@ -213,42 +213,6 @@ def test_medianFilter():
 
     print("Todos los tests de medianFilter han pasado.")
 
-'''
-def test_erode():
-    
-    images = ['morph.png', 'image2.png']
-
-    SEs = {
-    "square_3x3": np.array([[1, 1, 1],
-                             [1, 1, 1],
-                             [1, 1, 1]]),  # SE 3x3
-    
-    "square_2x2": np.array([[1, 1],
-                             [1, 1]]),       # SE 2x2
-    
-    "cross": np.array([[0, 1, 0],
-                       [1, 1, 1],
-                       [0, 1, 0]]),     # SE cruzado
-    
-    "diagonal": np.array([[1, 0, 0],
-                          [0, 1, 0],
-                          [0, 0, 1]])      # SE diagonal
-    }
-
-    centers = {
-    "center_top_left": [0, 0],                    # Centro en la esquina superior izquierda
-    "center_center": [1, 1],                      # Centro en la posición central para un SE 3x3
-    "center_bottom_right": [2, 2]                 # Centro en la esquina inferior derecha para un SE 3x3
-    }
-
-    for image in images:
-        
-        inputImage = load_image(image)
-
-        for se in SEs:
-            outImage = erode(inputImage, se)
-
-'''
 
 def test_erode():
 
@@ -503,6 +467,13 @@ def test_fill():
     try:
         invalid_center = [3, 1]
         outImage_invalid_center = fill(inputImage, seeds, SE=SE_square, center=invalid_center)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
+
+    #Caso 7 :verificar que se lanza un ValueError cuando hay una semilla fuera de los limites de la imagen
+    try:
+        invalid_seed = [(-10,-10)]
+        outImage_invalid_seed = fill(inputImage, invalid_seed)
     except ValueError as e:
         print(f"Prueba pasada: {e}")
     

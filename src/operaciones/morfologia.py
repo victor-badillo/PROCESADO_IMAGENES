@@ -168,6 +168,8 @@ def fill(inImage, seeds, SE=DEFAULT_SE, center=DEFAULT_CENTER):
 
     #Añadir semillas a la imagen vacia
     for seed in seeds:
+        if seed[0] < 0 or seed[0] >= inImage.shape[0] or seed[1] < 0 or seed[1] >= inImage.shape[1]:
+            raise ValueError(f"Semilla {seed} está fuera de los límites de la imagen.")
         outImage[seed[0], seed[1]] = 1
 
 
