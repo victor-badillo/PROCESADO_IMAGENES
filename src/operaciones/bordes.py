@@ -2,17 +2,22 @@ import numpy as np
 from src.operaciones import filterImage, gaussianFilter
 
 '''
+Implementar una función que permita obtener las componentes Gx y Gy del gradiente de una
+imagen, pudiendo elegir entre los operadores de Roberts, CentralDiff (Diferencias centrales
+de Prewitt/Sobel sin promedio: i.e. [-1, 0, 1] y transpuesto), Prewitt y Sobel.
 No renormaliza
+
+[gx, gy] = gradientImage (inImage, operator)
+    inImage: ...
+    gx, gy: Componentes Gx y Gy del gradiente.
+    operator: Permite seleccionar el operador utilizado mediante los valores: 'Roberts',
+        'CentralDiff', 'Prewitt' o 'Sobel'.
 '''
 def gradientImage(inImage, operator):
 
-    # Definir las máscaras para cada operador
     if operator == 'Roberts':
-        Gx_kernel = np.array([[1, 0], [0, -1]], dtype=np.float64)
-        Gy_kernel = np.array([[0, 1], [-1, 0]], dtype=np.float64)
-
-        # Gx_kernel = np.array([[-1, 0], [0, 1]], dtype=np.float64)
-        # Gy_kernel = np.array([[0, -1], [1, 0]], dtype=np.float64)
+        Gx_kernel = np.array([[-1, 0], [0, 1]], dtype=np.float64)
+        Gy_kernel = np.array([[0, -1], [1, 0]], dtype=np.float64)
 
     elif operator == 'CentralDiff':
         Gx_kernel = np.array([[-1, 0, 1]], dtype=np.float64)
@@ -37,7 +42,6 @@ def gradientImage(inImage, operator):
     else:
         raise ValueError("Operador no válido. Debe ser 'Roberts', 'CentralDiff', 'Prewitt' o 'Sobel'.")
 
-    # Aplicar la convolución para obtener Gx y Gy usando tu función filterImage
     gx = filterImage(inImage, Gx_kernel)
     gy = filterImage(inImage, Gy_kernel)
 
@@ -45,7 +49,13 @@ def gradientImage(inImage, operator):
 
 
 '''
+Implementar el filtro Laplaciano de Gaussiano que permita especificar el parámetro sigma de la
+Gaussiana utilizada.
 No renormaliza
+
+outImage = LoG (inImage, sigma)
+    inImage, outImage: ...
+    sigma: Parámetro sigma de la Gaussiana
 '''
 def LoG(inImage, sigma):
     # Paso 1: Suavizar la imagen utilizando el filtro gaussiano
@@ -62,6 +72,17 @@ def LoG(inImage, sigma):
     return outImage
 
 
+
+'''
+Implementar el detector de bordes de Canny.
+No renormaliza
+
+outImage = edgeCanny (inImage, sigma, tlow, thigh)
+    inImage, outImage: ...
+    sigma: Parámetro sigma del filtro Gaussiano.
+    tlow, thigh: Umbrales de histéresis bajo y alto, respectivamente.
+
+'''
 def edgeCanny(inImage, sigma, tlow, thigh):
     # Paso 1: Suavizar la imagen utilizando el filtro gaussiano
     smoothedImage = gaussianFilter(inImage, sigma)

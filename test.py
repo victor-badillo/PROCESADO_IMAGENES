@@ -427,7 +427,6 @@ def test_closing():
     print("Todas las pruebas de closing han pasado con éxito.")
 
 
-
 def test_fill():
 
     image_name = os.path.basename(INPUT_IMAGES + 'B.png')
@@ -481,46 +480,46 @@ def test_fill():
 
 
 def test_gradientImage():
-    # Cargar la imagen de prueba
-    image_name = os.path.basename(INPUT_IMAGES + 'circleWhite.png')  # Asegúrate de que la imagen esté en esta ruta
-    image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = load_image(image_name)  # Cargar la imagen
 
-    # Caso 1: Aplicar el operador Roberts
+    image_name = os.path.basename(INPUT_IMAGES + 'circleWhite.png')
+    image_name_ext = os.path.splitext(image_name)[0]
+
+    inputImage = load_image(image_name)
+
+    #Caso 1 : Roberts
     gx_roberts, gy_roberts = gradientImage(inputImage, 'Roberts')
-    gx_roberts = np.clip(gx_roberts, 0, 1)
-    gy_roberts = np.clip(gy_roberts, 0, 1)
+    gx_roberts = np.clip(gx_roberts,0,1)
+    gy_roberts = np.clip(gy_roberts,0,1)
     save_image_int(f'{image_name_ext}_gradient_roberts_gx.png', gx_roberts)
     save_image_int(f'{image_name_ext}_gradient_roberts_gy.png', gy_roberts)
 
-    # Caso 2: Aplicar el operador CentralDiff
+    #Caso 2 : CentralDiff
     gx_central, gy_central = gradientImage(inputImage, 'CentralDiff')
-    gx_central = np.clip(gx_central, 0, 1)
-    gy_central = np.clip(gy_central, 0, 1)
+    gx_central = np.clip(gx_central,0,1)
+    gy_central = np.clip(gy_central, 0,1)
     save_image_int(f'{image_name_ext}_gradient_central_gx.png', gx_central)
     save_image_int(f'{image_name_ext}_gradient_central_gy.png', gy_central)
 
-    # Caso 3: Aplicar el operador Prewitt
+    #Caso 3 : Prewitt
     gx_prewitt, gy_prewitt = gradientImage(inputImage, 'Prewitt')
-    gx_prewitt = np.clip(gx_prewitt, 0, 1)
-    gy_prewitt = np.clip(gy_prewitt, 0, 1)
+    gx_prewitt = np.clip(gx_prewitt,0,1)
+    gy_prewitt = np.clip(gy_prewitt,0,1)
     save_image_int(f'{image_name_ext}_gradient_prewitt_gx.png', gx_prewitt)
     save_image_int(f'{image_name_ext}_gradient_prewitt_gy.png', gy_prewitt)
 
-    # Caso 4: Aplicar el operador Sobel
+    #Caso 4 : Sobel
     gx_sobel, gy_sobel = gradientImage(inputImage, 'Sobel')
-    gx_sobel = np.clip(gx_sobel, 0, 1)
-    gy_sobel = np.clip(gy_sobel, 0, 1)
+    gx_sobel = np.clip(gx_sobel,0,1)
+    gy_sobel = np.clip(gy_sobel,0,1)
     save_image_int(f'{image_name_ext}_gradient_sobel_gx.png', gx_sobel)
     save_image_int(f'{image_name_ext}_gradient_sobel_gy.png', gy_sobel)
 
-    # Caso 5: Verificar que se lanza un ValueError para un operador no válido
+    #Caso 5 :verificar que se lanza un ValueError para un operador no válido
     try:
         gradientImage(inputImage, 'InvalidOperator')
     except ValueError as e:
         print(f"Prueba pasada: {e}")
 
-    # Imprimir mensaje de éxito
     print("Todas las pruebas de gradientImage han pasado con éxito.")
 
 def test_LoG():
@@ -599,7 +598,7 @@ if __name__ == "__main__":
     #test_dilate()
     #test_opening()
     #test_closing()
-    test_fill()
-    #test_gradientImage()
+    #test_fill()
+    test_gradientImage()
     #test_LoG()
     #test_edgeCanny()

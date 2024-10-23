@@ -151,7 +151,6 @@ def closing(inImage, SE, center=DEFAULT_CENTER):
     return outImage
 
 
-# Usar visualiza_int
 '''
 Implementar el algoritmo de llenado morfológico de regiones de una imagen, dado un
 elemento estructurante de conectivdad, y una lista de puntos semilla
