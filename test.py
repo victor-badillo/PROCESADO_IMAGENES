@@ -257,6 +257,8 @@ def test_erode():
     
     inputImage = load_image(image_name)
 
+    print((np.array([[1], [1]], dtype=np.uint8)).shape)
+
     #Caso 1 :erosión con un SE 3x3 y centro predeterminado
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
@@ -292,6 +294,13 @@ def test_erode():
     try:
         invalid_center = [3, 1]
         outImage_invalid_center = erode(inputImage, SE_square, center=invalid_center)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
+
+    #Caso 7 :verificar que se lanza un ValueError cuando el SE es vacio
+    try:
+        invalid_SE = np.array([], dtype=np.uint8)
+        outImage_invalid_SE = erode(inputImage, invalid_SE)
     except ValueError as e:
         print(f"Prueba pasada: {e}")
 

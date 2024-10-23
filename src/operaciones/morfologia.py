@@ -10,6 +10,9 @@ outImage = erode (inImage, SE, center=[])
         se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
 '''
 def erode(inImage, SE, center=DEFAULT_CENTER):
+
+    if SE.shape[0] < 1 or SE.shape[1] < 1:
+        raise ValueError("El SE debe tener al menos dimension 1x1")
     
     #Calcular centro si no se especifica uno
     if not center:
