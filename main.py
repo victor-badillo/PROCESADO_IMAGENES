@@ -6,34 +6,22 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     
-    # inputImage = load_image('image2.png')
+    inputImage = load_image('lady.png')
 
-    # outImage = gaussianFilter(inputImage, 0.8)
-    # outImage_adjust = adjustIntensity(outImage)
-    # save_image_int('mia.png', outImage_adjust)
+    #Caso 1 : Roberts
+    gx_roberts, gy_roberts = gradientImage(inputImage, 'Sobel')
+    #gx_roberts = adjustIntensity(gx_roberts)
+    #gy_roberts = adjustIntensity(gy_roberts)
+    #gx_roberts = np.clip(gx_roberts, 0, 1)
+    #gy_roberts = np.clip(gy_roberts, 0, 1)
+    roberts_x = np.array([[1, 0],
+                      [0, -1]], dtype=np.float32)
 
-    # cv2Image = cv2.filter2D(inputImage, -1, gaussKernel1D(0.8))
-    # save_image_int('cv2.png', cv2Image)
+    roberts_y = np.array([[0, 1],
+                        [-1, 0]], dtype=np.float32)
 
-    # input_image = load_image('eq0.png')
-    # hist, bin_edges = histogram(input_image, 256)
-    # plot_histogram(hist, bin_edges)
-
-    # output_image = equalizeIntensity(input_image)
-    # hist, bin_edges = histogram(output_image, 256)
-    # plot_histogram(hist, bin_edges)
-
-    # save_image_int('dopaturbo.png', output_image)
-
-    # output_image = cv2.equalizeHist((input_image * 255).astype(np.uint8))
-    # hist, bin_edges = histogram(output_image, 256)
-    # plot_histogram(hist, bin_edges)
-    
-
-
-
-    # visualize_image_float('epale', output_image)
-    # save_image_float('dopanete.png', output_image)
-
-    
-    
+    # Aplicar el filtro de Roberts en X y Y
+    gx = cv2.filter2D(inputImage, cv2.CV_64F, roberts_x)
+    gy = cv2.filter2D(inputImage, cv2.CV_64F, roberts_y)
+    save_image_int('gx.png', gx_roberts)
+    save_image_int('gy.png', gy_roberts)

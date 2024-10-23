@@ -498,6 +498,7 @@ def test_gradientImage():
     gx_roberts, gy_roberts = gradientImage(inputImage, 'Roberts')
     gx_roberts = np.clip(gx_roberts,0,1)
     gy_roberts = np.clip(gy_roberts,0,1)
+    #visualize_image_float(image_name_ext,gx_roberts)
     save_image_int(f'{image_name_ext}_gradient_roberts_gx.png', gx_roberts)
     save_image_int(f'{image_name_ext}_gradient_roberts_gy.png', gy_roberts)
 
@@ -542,6 +543,7 @@ def test_LoG():
     sigma_1 = 0.1
     outImage_sigma_1 = LoG(inputImage, sigma_1)
     outImage_sigma_1 = adjustIntensity(outImage_sigma_1)
+    #visualize_image_float(image_name_ext,outImage_sigma_1)
     save_image_int(f'{image_name_ext}_LoG_sigma_1.png', outImage_sigma_1)
 
     #Caso 2 :sigma 2.0
@@ -567,31 +569,29 @@ def test_LoG():
 
 
 def test_edgeCanny():
-    # Cargar la imagen de prueba
-    image_name = os.path.basename(INPUT_IMAGES + 'circles1.png')  # Cambia 'test_image.png' por el nombre de tu imagen
-    image_name_ext = os.path.splitext(image_name)[0]
-    inputImage = load_image(image_name)  # Cargar la imagen
 
-    # Definir diferentes parámetros para probar
+    image_name = os.path.basename(INPUT_IMAGES + 'lena.png')
+    image_name_ext = os.path.splitext(image_name)[0]
+
+    inputImage = load_image(image_name)
+
     test_cases = [
-        (1.0, 50, 150, 'sigma_1_tlow_50_thigh_150.png'),
-        (1.0, 100, 200, 'sigma_1_tlow_100_thigh_200.png'),
-        (2.0, 50, 150, 'sigma_2_tlow_50_thigh_150.png'),
-        (2.0, 100, 200, 'sigma_2_tlow_100_thigh_200.png'),
-        (3.0, 50, 150, 'sigma_3_tlow_50_thigh_150.png'),
-        (3.0, 100, 200, 'sigma_3_tlow_100_thigh_200.png'),
+        (1.0, 0.1, 0.3, 'sigma_1_tlow_0.1_thigh_0.3.png'),
+        (1.0, 0.2, 0.2, 'sigma_1_tlow_0.2_thigh_0.2.png'),
+        (2.0, 0.05, 0.2, 'sigma_2_tlow_0.05_thigh_0.2.png'),
+        (2.0, 0.5, 0.7, 'sigma_2_tlow_0.5_thigh_0.7.png'),
+        (3.0, 0.2, 0.4, 'sigma_3_tlow_0.2_thigh_0.4.png'),
+        (3.0, 0.1, 0.3, 'sigma_3_tlow_0.1_thigh_0.3.png'),
     ]
 
     for sigma, tlow, thigh, output_filename in test_cases:
-        # Aplicar el detector de bordes de Canny
+
         outImage = edgeCanny(inputImage, sigma, tlow, thigh)
-        outImage = np.clip(outImage, 0, 1)
-        # Guardar la imagen de salida
+        #visualize_image_float(image_name_ext, outImage)
         save_image_int(f'{image_name_ext}_{output_filename}', outImage)
 
 
-    # Imprimir mensaje de éxito
-    print("Todas las pruebas de LoG han pasado con éxito.")
+    print("Todas las pruebas de edgeCanny han pasado con éxito.")
 
 
 if __name__ == "__main__":
@@ -607,5 +607,5 @@ if __name__ == "__main__":
     #test_closing()
     #test_fill()
     #test_gradientImage()
-    test_LoG()
-    #test_edgeCanny()
+    #test_LoG()
+    test_edgeCanny()
