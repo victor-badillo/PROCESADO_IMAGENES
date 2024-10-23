@@ -11,6 +11,7 @@ outImage = erode (inImage, SE, center=[])
 '''
 def erode(inImage, SE, center=DEFAULT_CENTER):
 
+    #Verificar que el SE tiene dimensiones validas
     if SE.shape[0] < 1 or SE.shape[1] < 1:
         raise ValueError("El SE debe tener al menos dimension 1x1")
     
@@ -88,33 +89,35 @@ outImage = dilate (inImage, SE, center=[])
         se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
 '''
 def dilate(inImage, SE, center=DEFAULT_CENTER):
-    # Determinar el centro del elemento estructurante
+
+    #Verificar que el SE tiene dimensiones validas
+    if SE.shape[0] < 1 or SE.shape[1] < 1:
+        raise ValueError("El SE debe tener al menos dimension 1x1")
+    
+    #Calcular centro si no se especifica uno
     if not center:
         center = [SE.shape[0] // 2, SE.shape[1] // 2]  # Centro geométrico por defecto
 
-    # Verificar que el 'center' esté dentro de los límites del elemento estructurante
+    #Verificar que el centro no se sale del SE
     if (center[0] < 0 or center[0] >= SE.shape[0]) or (center[1] < 0 or center[1] >= SE.shape[1]):
-        raise ValueError("El valor de 'center' debe estar dentro de los límites del elemento estructurante.")
+        raise ValueError("El centro del elemento estructurante se sale del SE")
 
-    # Crear la imagen de salida inicializada a ceros
     outImage = np.zeros_like(inImage)
 
-    # Calcular el padding basado en el centro del EE
-    pad_y = center[0]  # Padding superior
-    pad_x = center[1]  # Padding izquierdo
+    #Calcular el padding basado en el centro del SE
+    pad_y = center[0]
+    pad_x = center[1]
 
-    # Añadir padding a la imagen de entrada
+    #Añadir padding de tipo constante con 0
     paddedImage = np.pad(inImage, ((pad_y, SE.shape[0] - center[0] - 1), (pad_x, SE.shape[1] - center[1] - 1)), mode='constant', constant_values=0)
-    #paddedImage = np.pad(inImage, ((pad_y, SE.shape[0] - center[0] - 1), (pad_x, SE.shape[1] - center[1] - 1)), mode='reflect')
 
-    # Aplicar dilatación
+    #Dilatación
     for i in range(outImage.shape[0]):
         for j in range(outImage.shape[1]):
-            # Extraer la región de interés considerando el tamaño del SE
+
             region = paddedImage[i:i + SE.shape[0], j:j + SE.shape[1]]
 
-            # Aplicar la operación de dilatación: si algún píxel de la región es blanco, se establece el píxel de salida a blanco
-            if np.any(region[SE == 1] == 1):
+            if np.any(region[SE == 1] == 1):    #Si alguno es 1, entonces es 1 sino 0
                 outImage[i, j] = 1
 
     return outImage
