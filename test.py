@@ -252,48 +252,49 @@ def test_erode():
 
 def test_erode():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'morph.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'B.png')
     image_name_ext = os.path.splitext(image_name)[0]
+    
+    inputImage = load_image(image_name)
 
-    # Caso 1: Erosión con un EE 3x3 y centro predeterminado
-    inputImage = load_image(image_name)  # Cargar imagen de prueba
+    #Caso 1 :erosión con un SE 3x3 y centro predeterminado
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
-                          [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
+                          [1, 1, 1]], dtype=np.uint8)
     outImage_default = erode(inputImage, SE_square)
-    save_image_int(f'{image_name_ext}_default.png', outImage_default) #Guardar asi para visualizar correctamente
+    save_image_int(f'{image_name_ext}_default.png', outImage_default)
 
-    # Caso 2: Erosión con un EE personalizado (1x3) y centro predeterminado
-    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
+    #Caso 2 :erosión con un SE horizontal 1x3 y centro predeterminado
+    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = erode(inputImage, SE_1x3)
+    #visualize_image_float(image_name_ext, outImage_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
-    # Caso 3: Erosión con un EE personalizado (3x1) y centro predeterminado
-    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)  # EE vertical de 3x1
+    #Caso 3 :erosión con un SE vertical 3x1 y centro predeterminado
+    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)
     outImage_3x1 = erode(inputImage, SE_3x1)
     save_image_int(f'{image_name_ext}_3x1.png', outImage_3x1)
 
-    # Caso 4: Erosión con un EE cuadrado 3x3 y un centro personalizado
+    #Caso 4 :erosión con un SE cuadrado 3x3 y un centro personalizado
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
-                          [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
-    custom_center = [1, 1]  # Centro en el medio
+                          [1, 1, 1]], dtype=np.uint8)
+    custom_center = [1, 1]
     outImage_custom_center = erode(inputImage, SE_square, center=custom_center)
     save_image_int(f'{image_name_ext}_custom_center.png', outImage_custom_center)
 
-    # Caso 5: Erosión con un EE 3x3 y un centro en la esquina inferior derecha
-    custom_center_edge = [2, 2]  # Centro en la esquina inferior derecha
+    # Caso 5 :erosión con un EE 3x3 y un centro en la esquina inferior derecha
+    custom_center_edge = [2, 2]
     outImage_edge_center = erode(inputImage, SE_square, center=custom_center_edge)
     save_image_int(f'{image_name_ext}_edge_center.png', outImage_edge_center)
 
-    # Caso 6: Verificar que se lanza un ValueError cuando el centro está fuera de los límites
+    #Caso 6 :verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
-        invalid_center = [3, 1]  # Fuera de los límites para un EE 3x3
+        invalid_center = [3, 1]
         outImage_invalid_center = erode(inputImage, SE_square, center=invalid_center)
     except ValueError as e:
         print(f"Prueba pasada: {e}")
 
-    # Imprimir mensajes de éxito
     print("Todas las pruebas de erosión han pasado con éxito.")
 
 
@@ -664,8 +665,8 @@ if __name__ == "__main__":
     #test_filterImage()
     #test_gaussKernel1D()
     #test_gaussianFilter()
-    test_medianFilter()
-    #test_erode()
+    #test_medianFilter()
+    test_erode()
     #test_dilate()
     #test_opening()
     #test_opening_cv2()

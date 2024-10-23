@@ -1,42 +1,40 @@
 import numpy as np
-import cv2
 from configuracion import DEFAULT_CENTER, DEFAULT_SE
 
-#blanco sobre fondo negro, objetos tienden a encojerse, se usa para separar objetos con pequeñas uniones
 '''
-Reduce tamaño de los objetos blancos, elimina ruido, objetos mas delgados y redondeados, aumenta
-espacio entre objetos
-No renormaliza, pero no hace falta ya que no puede haber valores distintos de 0 o 1
+outImage = erode (inImage, SE, center=[])
+    inImage, outImage: ...
+    SE: Matriz PxQ de zeros y unos definiendo el elemento estructurante.
+    center: Vector 1x2 con las coordenadas del centro de SE. Se asume que el [0 0] es
+        la esquina superior izquierda. Si es un vector vacío (valor por defecto), el centro
+        se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
 '''
 def erode(inImage, SE, center=DEFAULT_CENTER):
-    # Determinar el centro del elemento estructurante si no se proporciona
+    
+    #Calcular centro si no se especifica uno
     if not center:
-        center = [SE.shape[0] // 2, SE.shape[1] // 2]  # Centro geométrico por defecto
+        center = [SE.shape[0] // 2, SE.shape[1] // 2]
 
-    # Verificar que el 'center' esté dentro de los límites del elemento estructurante
+    #Verificar que el centro no se sale del SE
     if (center[0] < 0 or center[0] >= SE.shape[0]) or (center[1] < 0 or center[1] >= SE.shape[1]):
-        raise ValueError("El valor de 'center' debe estar dentro de los límites del elemento estructurante.")
+        raise ValueError("El centro del elemento estructurante se sale del SE")
 
-    # Crear la imagen de salida inicializada a ceros
     outImage = np.zeros_like(inImage)
 
-    # Calcular el padding basado en el centro del EE
-    pad_y = center[0]  # Padding vertical basado en el centro del SE
-    pad_x = center[1]  # Padding horizontal basado en el centro del SE
+    #Calcular el padding basado en el centro del SE
+    pad_y = center[0]
+    pad_x = center[1]
 
-    # Añadir padding a la imagen de entrada
+    #Añadir padding de tipo constante con 0
     paddedImage = np.pad(inImage, ((pad_y, SE.shape[0] - center[0] - 1), (pad_x, SE.shape[1] - center[1] - 1)), mode='constant', constant_values=0)
-    #paddedImage = np.pad(inImage, ((pad_y, SE.shape[0] - center[0] - 1), (pad_x, SE.shape[1] - center[1] - 1)), mode='reflect')
 
-    # Aplicar erosión
+    #Erosion
     for i in range(outImage.shape[0]):
         for j in range(outImage.shape[1]):
 
-            # Extraer la región de interés considerando el tamaño del SE
             region = paddedImage[i:i + SE.shape[0], j:j + SE.shape[1]]
 
-            # Aplicar la operación de erosión: comparando solo donde el SE tiene unos
-            if np.all(region[SE == 1] == 1):
+            if np.all(region[SE == 1] == 1):    #Si todos son 1, entonces es 1 sino es un 0
                 outImage[i, j] = 1
 
     return outImage
@@ -78,6 +76,14 @@ def dilate(inImage, SE, center=DEFAULT_CENTER):
 
 '''
 
+'''
+outImage = dilate (inImage, SE, center=[])
+    inImage, outImage: ...
+    SE: Matriz PxQ de zeros y unos definiendo el elemento estructurante.
+    center: Vector 1x2 con las coordenadas del centro de SE. Se asume que el [0 0] es
+        la esquina superior izquierda. Si es un vector vacío (valor por defecto), el centro
+        se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
+'''
 def dilate(inImage, SE, center=DEFAULT_CENTER):
     # Determinar el centro del elemento estructurante
     if not center:
@@ -112,6 +118,14 @@ def dilate(inImage, SE, center=DEFAULT_CENTER):
     
 #Eliminar objetis pequeños o ruido , se preservan froma y tamaño de los objeto mas grandes
 #Primero erosion para eliminar objetos pequeños y ruido y luego dilatacion para devolver al tamaño normal
+'''
+outImage = opening (inImage, SE, center=[])
+    inImage, outImage: ...
+    SE: Matriz PxQ de zeros y unos definiendo el elemento estructurante.
+    center: Vector 1x2 con las coordenadas del centro de SE. Se asume que el [0 0] es
+        la esquina superior izquierda. Si es un vector vacío (valor por defecto), el centro
+        se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
+'''
 def opening(inImage, SE, center=DEFAULT_CENTER):
     # Apertura: erosión seguida de dilatación
     eroded = erode(inImage, SE, center)
@@ -122,16 +136,31 @@ def opening(inImage, SE, center=DEFAULT_CENTER):
 
 #Cerrar pequeños huevos y espacios dentro de los objetos
 #Mejora conectividad y forma de los objetos
+'''
+outImage = closing (inImage, SE, center=[])
+    inImage, outImage: ...
+    SE: Matriz PxQ de zeros y unos definiendo el elemento estructurante.
+    center: Vector 1x2 con las coordenadas del centro de SE. Se asume que el [0 0] es
+        la esquina superior izquierda. Si es un vector vacío (valor por defecto), el centro
+        se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
+'''
 def closing(inImage, SE, center=DEFAULT_CENTER):
     # Cierre: dilatación seguida de erosión
     dilated = dilate(inImage, SE, center)
     outImage = erode(dilated, SE, center)
     return outImage
 
-
+# Rellenar regiones
+# Usar visualiza_int
 '''
-Rellenar regiones
-Usar visualiza_int
+Implementar el algoritmo de llenado morfológico de regiones de una imagen, dado un
+elemento estructurante de conectivdad, y una lista de puntos semilla
+
+outImage = fill (inImage, seeds, SE=[], center=[])
+    inImage, outImage, center: ...
+    seeds: Matriz Nx2 con N coordenadas (fila,columna) de los puntos semilla.
+    SE: Matriz PxQ de zeros y unos definiendo el elemento estructurante de conectividad.
+        Si es un vector vacío se asume conectividad 4 (cruz 3 x 3).
 '''
 def fill(inImage, seeds, SE=DEFAULT_SE, center=DEFAULT_CENTER):
     
