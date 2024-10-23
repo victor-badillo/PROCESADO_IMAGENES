@@ -158,7 +158,7 @@ def edgeCanny(inImage, sigma, tlow, thigh):
     nms_image = np.zeros_like(magnitude, dtype=np.float64)
     rows, cols = magnitude.shape
 
-    perp = np.zeros_like(magnitude, dtype=object)
+    perp = np.zeros((rows, cols, 2), dtype=int) #Almacenamiento de las perpendiculares a la normal
 
     #Bucle con indices adecuados para no situarse en los bordes de la imagen
     for i in range(1, rows - 1):
