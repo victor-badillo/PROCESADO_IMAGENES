@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 '''
 Funcion para cargar imagenes en escala de grises y float64
 '''
-def load_image(nombre_imagen):
+def load_image(image_name):
 
-    img_path = INPUT_IMAGES + nombre_imagen
+    img_path = INPUT_IMAGES + image_name
    
     inImage = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)    #Escala de grises
     
@@ -43,13 +43,13 @@ def visualize_image_float(title, image):
 '''
 Funcion para guardar imagen, imagen [0,255]
 '''
-def save_image_int(nombre_imagen, image):
+def save_image_int(image_name, image):
 
-    img_path = OUTPUT_IMAGES + nombre_imagen
+    img_path = OUTPUT_IMAGES + image_name
     success = cv2.imwrite(img_path,(image * 255).astype(np.uint8))
 
     if success:
-        print("La imagen ==> " + nombre_imagen + " ==> se guardó correctamente.")
+        print("La imagen ==> " + image_name + " ==> se guardó correctamente.")
     else:
         print("Error al guardar la imagen ==>" + img_path)
 
@@ -57,13 +57,13 @@ def save_image_int(nombre_imagen, image):
 '''
 Funcion para guardar imagen, imagen [0,1]
 '''
-def save_image_float(nombre_imagen, image):
+def save_image_float(image_name, image):
 
-    img_path = OUTPUT_IMAGES + nombre_imagen
+    img_path = OUTPUT_IMAGES + image_name
     success = cv2.imwrite(img_path,image)
 
     if success:
-        print("La imagen ==> " + nombre_imagen + " ==> se guardó correctamente.")
+        print("La imagen ==> " + image_name + " ==> se guardó correctamente.")
     else:
         print("Error al guardar la imagen ==>" + img_path)
 
@@ -71,13 +71,13 @@ def save_image_float(nombre_imagen, image):
 '''
 Función para calcular el histograma de una imagen de forma manual
 '''
-def histogram(inImage, bins, min_range=0.0, max_range=1.0):
+def histogram(in_image, bins, min_range=0.0, max_range=1.0):
 
     hist = np.zeros(bins, dtype=int) #Histograma con 0
 
     bin_size = (max_range - min_range) / bins   #Tamaño del bin
 
-    for pixel in inImage.flatten():
+    for pixel in in_image.flatten():
         
         if min_range <= pixel <= max_range: #Omitir pixeles con valores fuera del rango
             bin_index = int((pixel - min_range) // bin_size)

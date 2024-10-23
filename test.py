@@ -19,18 +19,18 @@ def test_adjustIntensity():
 
     #Caso 2:ajuste del rango de intensidad de entrada
     in_range = [0.2, 0.8]
-    out_image_in_range = adjustIntensity(in_image, inRange=in_range)
+    out_image_in_range = adjustIntensity(in_image, in_range=in_range)
     save_image_int(f'{image_name_ext}_adjust_in_range.png', out_image_in_range)
 
     #Caso 3:ajuste del rango de intensidad de salida
     out_range = [0.1, 0.9]
-    out_image_out_range = adjustIntensity(in_image, outRange=out_range)
+    out_image_out_range = adjustIntensity(in_image, out_range=out_range)
     save_image_int(f'{image_name_ext}_adjust_out_range.png', out_image_out_range)
 
     #Caso 4:ajuste tanto de rango de entrada como de salida
     in_range = [0.1, 0.7]
     out_range = [0.0, 0.5]
-    out_image_full = adjustIntensity(in_image, inRange=in_range, outRange=out_range)
+    out_image_full = adjustIntensity(in_image, in_range=in_range, out_range=out_range)
     save_image_int(f'{image_name_ext}_adjust_full.png', out_image_full)
 
     print("Las imágenes ajustadas han sido guardadas con éxito.")
@@ -72,7 +72,7 @@ def test_equalize_intensity():
     
 def test_filterImage():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'grays.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'grid0.png')
     image_name_ext = os.path.splitext(image_name)[0]
     in_image = load_image(image_name)
 
@@ -101,7 +101,7 @@ def test_filterImage():
 
         out_image = filterImage(in_image, kernel)
         #A lo mejor debo renormalizar (0,1) para ver correectamente
-        out_image = np.clip(out_image, 0, 1)
+        out_image = adjustIntensity(out_image)
         #
         save_image_int(f'{image_name_ext}_{kernel_name}.png', out_image)
 

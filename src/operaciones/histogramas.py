@@ -36,22 +36,22 @@ outImage = adjustIntensity (inImage, inRange=[], outRange=[0 1])
     outRange: Vector 1x2 con el rango de niveles de instensidad [omin, omax] de salida.
         El valor por defecto es [0 1].
 '''
-def adjustIntensity(inImage, inRange=DEFAULT_INRANGE, outRange=DEFAULT_OUTRANGE):
+def adjustIntensity(in_image, in_range=DEFAULT_INRANGE, out_range=DEFAULT_OUTRANGE):
     
-    if not inRange:  #Si no se especifica inRange utilizar el min y max de la imagen de entrada
-        imin = np.min(inImage)
-        imax = np.max(inImage)
+    if not in_range:  #Si no se especifica inRange utilizar el min y max de la imagen de entrada
+        imin = np.min(in_image)
+        imax = np.max(in_image)
     else:
-        imin, imax = inRange
+        imin, imax = in_range
     
-    omin, omax = outRange
+    omin, omax = out_range
 
-    outImage = (inImage - imin) * (omax - omin) / (imax - imin) + omin
+    out_image = (in_image - imin) * (omax - omin) / (imax - imin) + omin
 
     # Asegurar que el nuevo valor esté dentro del rango
-    outImage = np.clip(outImage, omin, omax)
+    out_image = np.clip(out_image, omin, omax)
 
-    return outImage
+    return out_image
 
 
 '''
@@ -63,24 +63,24 @@ outImage = equalizeIntensity (inImage, nBins=256)
         entrada [0 1] se divide en nBins intervalos iguales para hacer el procesamiento,
         y que la imagen de salida vuelve a quedar en el intervalo [0 1]. Por defecto 256.
 '''
-def equalizeIntensity(inImage, nBins=DEFAULT_NBINS):
+def equalizeIntensity(in_image, nBins=DEFAULT_NBINS):
 
     if nBins <= 0:
         raise ValueError("El numero de bins debe ser mayor que 0")
 
     #Calcular el histograma y los límites de los bins
-    hist, bin_edges = histogram(inImage, bins=nBins, min_range=0.0, max_range=1.0)
+    hist, bin_edges = histogram(in_image, bins=nBins, min_range=0.0, max_range=1.0)
 
     #Calcular la función de distribución acumulativa(CDF)
     cdf = hist.cumsum()  #Sumar el histograma acumulativo
     cdf_normalized = cdf / cdf[-1]  #Normalizar
 
     #Interpolacion
-    outImage = np.interp(inImage.flatten(), bin_edges[:-1], cdf_normalized)  #Usar los límites de los bins, el ultimo no , representa un limite inferior
-    outImage = outImage.reshape(inImage.shape)  #Devolver forma original a la imagen modificada
+    out_image = np.interp(in_image.flatten(), bin_edges[:-1], cdf_normalized)  #Usar los límites de los bins, el ultimo no , representa un limite inferior
+    out_image = out_image.reshape(in_image.shape)  #Devolver forma original a la imagen modificada
 
-    outImage = adjustIntensity(outImage) #Renormalizar
+    out_image = adjustIntensity(out_image) #Renormalizar
 
-    return outImage
+    return out_image
 
 

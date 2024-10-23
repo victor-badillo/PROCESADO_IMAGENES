@@ -4,35 +4,43 @@ import numpy as np
 Función para realizar un filtro espacial mediante convolución sobre una imagen con un 
 kernel arbitrario que se le pasa como parámetro
 No renormaliza
+
+outImage = filterImage (inImage, kernel)
+    inImage, outImage: ...
+    kernel: Matriz PxQ con el kernel del filtro de entrada. Se asume que la posición central
+        del filtro está en (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
 '''
 def filterImage(inImage, kernel):
 
-    # Obtener el tamaño del kernel
     P, Q = kernel.shape
     
-    # Calcular el padding necesario
+    #Calcular el padding
     pad_y = P // 2
     pad_x = Q // 2
 
-    # Añadir padding a la imagen utilizando el modo 'reflect'
+    #Añadir padding con modo reflect
     paddedImage = np.pad(inImage, ((pad_y, pad_y), (pad_x, pad_x)), mode='reflect')
 
-    # Crear una imagen de salida inicializada a ceros
     outImage = np.zeros_like(inImage)
 
-    # Realizar la convolución
+    #Convolucion
     for i in range(inImage.shape[0]):
         for j in range(inImage.shape[1]):
-            # Extraer la región de interés
-            region = paddedImage[i:i + P, j:j + Q]
-            # Aplicar el kernel
+            
+            region = paddedImage[i:i + P, j:j + Q]  #Region
             outImage[i, j] = np.sum(region * kernel)
 
     return outImage
 
 
 '''
-Función que calcula un kernel Gaussiano unidimensional
+Función que calcula un kernel Gaussiano unidimensional con sigma dado
+
+kernel = gaussKernel1D (sigma)
+    sigma: Parámetro sigma de entrada.
+    kernel: Vector 1xN con el kernel de salida, teniendo en cuenta que:
+        • El centro x = 0 de la Gaussiana está en la posición ⌊N/2⌋ + 1.
+        • N se calcula a partir de sigma como N = 2⌈3sigma⌉ + 1.
 '''
 def gaussKernel1D(sigma):
     # Calcular N a partir de sigma
@@ -75,6 +83,12 @@ def gaussKernel1D(sigma):
 Función que permite realizar un suavizado Gaussiano bidimensional usando un filtro NxN de 
 parámetro sigma.
 No renormaliza
+
+outImage = gaussianFilter (inImage, sigma)
+    inImage, outImage, sigma: ...
+    Nota. Como el filtro Gaussiano es lineal y separable podemos implementar este suavi-
+    zado simplemente convolucionando la imagen, primero, con un kernel Gaussiano unidi-
+    mensional 1xN y, luego, convolucionando el resultado con el kernel transpuesto N x 1.
 '''
 def gaussianFilter(inImage, sigma):
     # Obtener el kernel gaussiano unidimensional
@@ -93,6 +107,11 @@ def gaussianFilter(inImage, sigma):
 '''
 Función que implementa el filtro de medianas bidimensional, especificando el tamaño del filtro
 No renormaliza
+
+outImage = medianFilter (inImage, filterSize)
+    inImage, outImage: ...
+    filterSice: Valor entero N indicando que el tamaño de ventana es de NxN. La posición
+        central de la ventana es (⌊N/2⌋ + 1, ⌊N/2⌋ + 1).
 '''
 def medianFilter(inImage, filterSize):
 

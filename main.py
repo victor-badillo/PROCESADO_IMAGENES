@@ -15,16 +15,25 @@ if __name__ == "__main__":
     # cv2Image = cv2.filter2D(inputImage, -1, gaussKernel1D(0.8))
     # save_image_int('cv2.png', cv2Image)
 
-    input_image = load_image('grays.png')
-    hist, bin_edges = histogram(input_image, 256)
-    plot_histogram(hist, bin_edges)
+    # input_image = load_image('eq0.png')
+    # hist, bin_edges = histogram(input_image, 256)
+    # plot_histogram(hist, bin_edges)
 
-    output_image = adjustIntensity(input_image)
-    hist, bin_edges = histogram(output_image, 256)
-    plot_histogram(hist, bin_edges)
+    # output_image = equalizeIntensity(input_image)
+    # hist, bin_edges = histogram(output_image, 256)
+    # plot_histogram(hist, bin_edges)
+
+    # save_image_int('dopaturbo.png', output_image)
+
+    # output_image = cv2.equalizeHist((input_image * 255).astype(np.uint8))
+    # hist, bin_edges = histogram(output_image, 256)
+    # plot_histogram(hist, bin_edges)
+    
 
 
-    visualize_image_float('epale', output_image)
-    save_image_int('dopanete.png', output_image)
 
+    # visualize_image_float('epale', output_image)
+    # save_image_float('dopanete.png', output_image)
+
+    
     
