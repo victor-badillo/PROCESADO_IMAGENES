@@ -24,7 +24,7 @@ def load_image(nombre_imagen):
 '''
 Funcion para visualizar imagen, imagen [0,255]
 '''
-def visualizar_imagen_int(title, image):
+def visualize_image_int(title, image):
     
     cv2.imshow(title, (image * 255).astype(np.uint8) )
     cv2.waitKey(0) 
@@ -34,7 +34,7 @@ def visualizar_imagen_int(title, image):
 '''
 Funcion para visualizar imagen, imagen [0,1]
 '''
-def visualizar_imagen_float(title, image):
+def visualize_image_float(title, image):
     
     cv2.imshow(title, image )
     cv2.waitKey(0)
@@ -43,7 +43,7 @@ def visualizar_imagen_float(title, image):
 '''
 Funcion para guardar imagen, imagen [0,255]
 '''
-def guardar_imagen_int(nombre_imagen, image):
+def save_image_int(nombre_imagen, image):
 
     img_path = OUTPUT_IMAGES + nombre_imagen
     success = cv2.imwrite(img_path,(image * 255).astype(np.uint8))
@@ -57,7 +57,7 @@ def guardar_imagen_int(nombre_imagen, image):
 '''
 Funcion para guardar imagen, imagen [0,1]
 '''
-def guardar_imagen_float(nombre_imagen, image):
+def save_image_float(nombre_imagen, image):
 
     img_path = OUTPUT_IMAGES + nombre_imagen
     success = cv2.imwrite(img_path,image)

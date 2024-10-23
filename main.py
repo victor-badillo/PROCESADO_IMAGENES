@@ -1,18 +1,30 @@
 import numpy as np
 import cv2
 from src import adjustIntensity, equalizeIntensity, filterImage, gaussKernel1D, gaussianFilter, medianFilter,erode, dilate, opening, closing, fill, gradientImage, LoG, edgeCanny
-from utilidades import load_image, guardar_imagen_int, guardar_imagen_float, visualizar_imagen_int, visualizar_imagen_float
-import matplotlib as plt
+from utilidades import load_image, save_image_int, save_image_float, visualize_image_int, visualize_image_float, plot_histogram, histogram
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     
-    inputImage = load_image('image2.png')
+    # inputImage = load_image('image2.png')
 
-    outImage = gaussianFilter(inputImage, 0.8)
-    outImage_adjust = adjustIntensity(outImage)
-    guardar_imagen_int('mia.png', outImage_adjust)
+    # outImage = gaussianFilter(inputImage, 0.8)
+    # outImage_adjust = adjustIntensity(outImage)
+    # save_image_int('mia.png', outImage_adjust)
 
-    cv2Image = cv2.filter2D(inputImage, -1, gaussKernel1D(0.8))
-    guardar_imagen_int('cv2.png', cv2Image)
+    # cv2Image = cv2.filter2D(inputImage, -1, gaussKernel1D(0.8))
+    # save_image_int('cv2.png', cv2Image)
+
+    input_image = load_image('grays.png')
+    hist, bin_edges = histogram(input_image, 256)
+    plot_histogram(hist, bin_edges)
+
+    output_image = adjustIntensity(input_image)
+    hist, bin_edges = histogram(output_image, 256)
+    plot_histogram(hist, bin_edges)
+
+
+    visualize_image_float('epale', output_image)
+    save_image_int('dopanete.png', output_image)
 
     
