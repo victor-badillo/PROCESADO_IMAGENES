@@ -114,23 +114,23 @@ def test_filterImage():
 
 
 def test_gaussKernel1D():
-    # Test 1: Verificar el tamaño del kernel
+    #Caso 1:verificar el tamaño del kernel
     sigma = 1
     kernel = gaussKernel1D(sigma)
     N = 2 * int(np.ceil(3 * sigma)) + 1
     assert len(kernel) == N, f"El tamaño del kernel debería ser {N} para sigma = {sigma}, pero fue {len(kernel)}."
 
-    # Test 2: Verificar que el kernel esté normalizado (suma cercana a 1)
+    #Caso 2:verificar que el kernel esté normalizado (suma cercana a 1)
     sigma = 1.5
     kernel = gaussKernel1D(sigma)
     assert np.isclose(np.sum(kernel), 1, atol=1e-5), f"La suma del kernel debería ser aproximadamente 1, pero fue {np.sum(kernel)}."
 
-    # Test 3: Verificar la simetría del kernel
+    #Caso 3:verificar la simetría del kernel
     sigma = 2
     kernel = gaussKernel1D(sigma)
     assert np.allclose(kernel, kernel[::-1]), "El kernel debería ser simétrico."
 
-    # Test 4: Verificar que los valores disminuyen desde el centro
+    #Caso 4:verificar que los valores disminuyen desde el centro
     sigma = 1
     kernel = gaussKernel1D(sigma)
     center = len(kernel) // 2
@@ -138,7 +138,7 @@ def test_gaussKernel1D():
         assert kernel[i] <= kernel[i + 1], f"Los valores del kernel deberían aumentar hasta el centro para sigma = {sigma}."
         assert kernel[-(i + 1)] <= kernel[-(i + 2)], f"Los valores del kernel deberían disminuir desde el centro para sigma = {sigma}."
 
-    # Test 5: Verificar el comportamiento con un valor pequeño de sigma, suavizado leve
+    #Caso 5:verificar el comportamiento con un valor pequeño de sigma, suavizado leve
     sigma = 0.5
     kernel = gaussKernel1D(sigma)
     assert len(kernel) == 2 * int(np.ceil(3 * sigma)) + 1, f"El tamaño del kernel debería ser {N} para sigma = {sigma}."
@@ -669,8 +669,8 @@ def test_edgeCanny():
 if __name__ == "__main__":
     #test_adjustIntensity()
     #test_equalize_intensity()
-    test_filterImage()
-    #test_gaussKernel1D()
+    #test_filterImage()
+    test_gaussKernel1D()
     #test_gaussianFilter()
     #test_medianFilter()
     #test_erode()

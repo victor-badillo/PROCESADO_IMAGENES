@@ -43,41 +43,21 @@ kernel = gaussKernel1D (sigma)
         • N se calcula a partir de sigma como N = 2⌈3sigma⌉ + 1.
 '''
 def gaussKernel1D(sigma):
-    # Calcular N a partir de sigma
+
     N = 2 * int(np.ceil(3 * sigma)) + 1
-    
-    # Crear un vector para el kernel
     kernel = np.zeros(N)
-    
-    # Calcular el centro del kernel
     center = N // 2
     
     # Calcular los valores del kernel
     for x in range(N):
-        # Usar la fórmula de la gaussiana
+
         kernel[x] = (1 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - center) / sigma) ** 2)
     
-    kernel /= np.sum(kernel)
+    kernel /= np.sum(kernel)    #Asi no cambio el brillo de la imagen
 
     return kernel
 
-'''
-#Version optimizada que utliza numpy, preguntar al profesor si se puede utilizar
-def gaussKernel1D(sigma):
-    # Calcular N a partir de sigma
-    N = 2 * int(np.ceil(3 * sigma)) + 1
-    
-    # Crear un vector de índices centrados en 0
-    x = np.arange(N) - N // 2
-    
-    # Calcular el kernel gaussiano usando NumPy (sin bucles)
-    kernel = np.exp(-0.5 * (x / sigma) ** 2)
-    
-    # Normalizar el kernel para que la suma sea 1
-    kernel /= np.sum(kernel)
 
-    return kernel
-'''
 
 '''
 Función que permite realizar un suavizado Gaussiano bidimensional usando un filtro NxN de 
