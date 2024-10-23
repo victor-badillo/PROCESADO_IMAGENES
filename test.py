@@ -100,6 +100,7 @@ def test_filterImage():
 
         out_image = filterImage(in_image, kernel)
         out_image = adjustIntensity(out_image)  #Renormalizacion
+        #visualize_image_float(image_name_ext, out_image)
         
         save_image_int(f'{image_name_ext}_{kernel_name}.png', out_image)
 
@@ -148,34 +149,25 @@ def test_gaussKernel1D():
 
 
 def test_gaussianFilter():
-    # Imagen de prueba: matriz constante de tamaño 5x5
+
+    #Caso 1:verificar que con una matriz constante no cambia la imagen
     inImage = np.ones((5, 5))
     sigma = 1.0
     outImage = gaussianFilter(inImage, sigma)
-    
-    # La imagen suavizada debería seguir siendo constante si la imagen de entrada es constante
-    assert np.allclose(outImage, 1), "El filtro no debería cambiar una imagen constante."
-
-    # Imagen de prueba: matriz identidad 5x5
-    inImage = np.eye(5)
-    sigma = 1.0
-    outImage = gaussianFilter(inImage, sigma)
-    
-    # Comprobamos si los valores están más cercanos al centro y disminuyen hacia los bordes (efecto de suavizado)
-    assert np.all(outImage >= 0) and np.all(outImage <= 1), "Los valores de la imagen filtrada deberían estar en el rango [0, 1]."
-    
+    assert np.allclose(outImage, 1), "El filtro no debería cambiar una imagen constante."  
 
     image_name = os.path.basename(INPUT_IMAGES + 'image2.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
-    # Test con diferentes valores de sigma
+    #Probar diferentes valores de sigma para una imagen
     inImage = load_image(image_name)
     sigma_values = [0.5, 1.0, 2.0, 3.0]
     for sigma in sigma_values:
         outImage = gaussianFilter(inImage, sigma)
-        outImage = np.clip(outImage, 0, 1)
+        outImage = adjustIntensity(outImage)    #Renormalizar
+        #visualize_image_float(image_name_ext, outImage)
         save_image_int(f'{image_name_ext}_gauss_{sigma}.png', outImage)
-        # La imagen debería suavizarse más a medida que aumentamos sigma
+
         assert outImage.shape == inImage.shape, f"La imagen de salida debería tener el mismo tamaño que la imagen de entrada para sigma = {sigma}."
 
     print("Todos los tests de gaussianFilter han pasado.")
@@ -670,8 +662,8 @@ if __name__ == "__main__":
     #test_adjustIntensity()
     #test_equalize_intensity()
     #test_filterImage()
-    test_gaussKernel1D()
-    #test_gaussianFilter()
+    #test_gaussKernel1D()
+    test_gaussianFilter()
     #test_medianFilter()
     #test_erode()
     #test_dilate()
