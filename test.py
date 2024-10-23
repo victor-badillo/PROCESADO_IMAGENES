@@ -68,11 +68,10 @@ def test_equalize_intensity():
 
     print("Las imágenes ecualizadas han sido guardadas con éxito.")
 
-
     
 def test_filterImage():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'grid0.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'circles.png')
     image_name_ext = os.path.splitext(image_name)[0]
     in_image = load_image(image_name)
 
@@ -100,26 +99,15 @@ def test_filterImage():
     for kernel_name, kernel in kernels.items():
 
         out_image = filterImage(in_image, kernel)
-        #A lo mejor debo renormalizar (0,1) para ver correectamente
-        out_image = adjustIntensity(out_image)
-        #
+        out_image = adjustIntensity(out_image)  #Renormalizacion
+        
         save_image_int(f'{image_name_ext}_{kernel_name}.png', out_image)
 
         assert out_image.shape == in_image.shape, f"La imagen de salida para el kernel {kernel_name} no tiene el mismo tamaño que la de entrada."
 
-
-    
-    #Probar con un kernel de tamaño par (debería lanzar un error)    
-    try:
-        invalid_kernel = np.array([[1, 1],
-                                   [1, 1]])
-        filterImage(in_image, invalid_kernel)
-    except ValueError as e:
-        print(e)
-
     #Probar con una imagen de todos ceros
     zero_image = np.zeros_like(in_image)
-    out_zero_image = filterImage(zero_image, kernel)
+    out_zero_image = filterImage(zero_image, kernels.get("average_3x3"))
     assert np.all(out_zero_image == 0), "La imagen de salida debería ser toda ceros."
 
     print("Todas las pruebas con múltiples kernels han pasado con éxito.")
@@ -680,8 +668,8 @@ def test_edgeCanny():
 
 if __name__ == "__main__":
     #test_adjustIntensity()
-    test_equalize_intensity()
-    #test_filterImage()
+    #test_equalize_intensity()
+    test_filterImage()
     #test_gaussKernel1D()
     #test_gaussianFilter()
     #test_medianFilter()
