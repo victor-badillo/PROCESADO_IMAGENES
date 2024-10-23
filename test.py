@@ -321,13 +321,13 @@ def test_dilate():
     outImage_default = dilate(inputImage, SE_square)
     save_image_int(f'{image_name_ext}_default.png', outImage_default)
 
-    #Caso 2 :dilatación con un SE 1x3 y centro predeterminado
+    #Caso 2 :dilatación con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
     outImage_1x3 = dilate(inputImage, SE_1x3)
     #visualize_image_float(image_name_ext, outImage_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
-    #Caso 3 :dilatación con un SE 3x1 y centro predeterminado
+    #Caso 3 :dilatación con un SE vertical 3x1 y centro predeterminado
     SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)  # EE vertical de 3x1
     outImage_3x1 = dilate(inputImage, SE_3x1)
     save_image_int(f'{image_name_ext}_3x1.png', outImage_3x1)
@@ -361,44 +361,52 @@ def test_dilate():
 
 def test_opening():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'morph.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'B.png')
     image_name_ext = os.path.splitext(image_name)[0]
-    # Caso 1: Opening con un EE 3x3 y centro predeterminado
-    inputImage = load_image(image_name)  # Cargar imagen de prueba
+
+    inputImage = load_image(image_name)
+
+    #Caso 1 :opening con un SE 3x3 y centro predeterminado
     SE_square = np.array([[1, 1, 1],
                           [1, 1, 1],
-                          [1, 1, 1]], dtype=np.uint8)  # EE cuadrado de 3x3
+                          [1, 1, 1]], dtype=np.uint8)
     outImage_default = opening(inputImage, SE_square)
     save_image_int(f'{image_name_ext}_default.png', outImage_default)
 
-    # Caso 2: Opening con un EE personalizado (1x3) y centro predeterminado
-    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
+    #Caso 2 :opening con un SE horizontal 1x3 y centro predeterminado
+    SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = opening(inputImage, SE_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
-    # Caso 3: Opening con un EE personalizado (3x1) y centro predeterminado
-    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)  # EE vertical de 3x1
+    #Caso 3 :opening con un SE vertical 3x1 y centro predeterminado
+    SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)
     outImage_3x1 = opening(inputImage, SE_3x1)
     save_image_int(f'{image_name_ext}_3x1.png', outImage_3x1)
 
-    # Caso 4: Opening con un EE cuadrado 3x3 y un centro personalizado
-    custom_center = [1, 1]  # Centro en el medio
+    #Caso 4 :opening con un SE cuadrado 3x3 y un centro personalizado
+    custom_center = [1, 1]
     outImage_custom_center = opening(inputImage, SE_square, center=custom_center)
     save_image_int(f'{image_name_ext}_custom_center.png', outImage_custom_center)
 
-    # Caso 5: Opening con un EE 3x3 y un centro en la esquina inferior derecha
-    custom_center_edge = [2, 2]  # Centro en la esquina inferior derecha
+    #Caso 5 :opening con un SE 3x3 y un centro en la esquina inferior derecha
+    custom_center_edge = [2, 2]
     outImage_edge_center = opening(inputImage, SE_square, center=custom_center_edge)
     save_image_int(f'{image_name_ext}_edge_center.png', outImage_edge_center)
 
-    # Caso 6: Verificar que se lanza un ValueError cuando el centro está fuera de los límites
+    #Caso 6: Verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
-        invalid_center = [3, 1]  # Fuera de los límites para un EE 3x3
+        invalid_center = [3, 1]
         outImage_invalid_center = opening(inputImage, SE_square, center=invalid_center)
     except ValueError as e:
         print(f"Prueba pasada: {e}")
 
-    # Imprimir mensaje de éxito
+    #Caso 7 :verificar que se lanza un ValueError cuando el SE es vacio
+    try:
+        invalid_SE = np.array([], dtype=np.uint8)
+        outImage_invalid_SE = erode(inputImage, invalid_SE)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
+
     print("Todas las pruebas de opening han pasado con éxito.")
 
 
@@ -685,8 +693,8 @@ if __name__ == "__main__":
     #test_gaussianFilter()
     #test_medianFilter()
     #test_erode()
-    test_dilate()
-    #test_opening()
+    #test_dilate()
+    test_opening()
     #test_opening_cv2()
     #test_closing()
     #test_closing_cv2()

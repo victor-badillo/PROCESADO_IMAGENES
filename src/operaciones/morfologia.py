@@ -121,9 +121,8 @@ def dilate(inImage, SE, center=DEFAULT_CENTER):
                 outImage[i, j] = 1
 
     return outImage
-    
-#Eliminar objetis pequeños o ruido , se preservan froma y tamaño de los objeto mas grandes
-#Primero erosion para eliminar objetos pequeños y ruido y luego dilatacion para devolver al tamaño normal
+
+
 '''
 outImage = opening (inImage, SE, center=[])
     inImage, outImage: ...
@@ -133,15 +132,11 @@ outImage = opening (inImage, SE, center=[])
         se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
 '''
 def opening(inImage, SE, center=DEFAULT_CENTER):
-    # Apertura: erosión seguida de dilatación
     eroded = erode(inImage, SE, center)
     outImage = dilate(eroded, SE, center)
     return outImage
 
 
-
-#Cerrar pequeños huevos y espacios dentro de los objetos
-#Mejora conectividad y forma de los objetos
 '''
 outImage = closing (inImage, SE, center=[])
     inImage, outImage: ...
@@ -151,10 +146,10 @@ outImage = closing (inImage, SE, center=[])
         se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
 '''
 def closing(inImage, SE, center=DEFAULT_CENTER):
-    # Cierre: dilatación seguida de erosión
     dilated = dilate(inImage, SE, center)
     outImage = erode(dilated, SE, center)
     return outImage
+
 
 # Rellenar regiones
 # Usar visualiza_int
