@@ -590,6 +590,12 @@ def test_edgeCanny():
         #visualize_image_float(image_name_ext, outImage)
         save_image_int(f'{image_name_ext}_{output_filename}', outImage)
 
+    #Caso 7 :verificar que se lanza un ValueError cuando thigh < tlow
+    try:
+        out_image_error = edgeCanny(inputImage, 1.0, 0.5, 0.1)
+    except ValueError as e:
+        print(f"Prueba pasada: {e}")
+
 
     print("Todas las pruebas de edgeCanny han pasado con éxito.")
 

@@ -144,6 +144,9 @@ def edgeCanny(inImage, sigma, tlow, thigh):
 '''
 
 def edgeCanny(inImage, sigma, tlow, thigh):
+
+    if(thigh < tlow):
+        raise ValueError("El umbral superior de histéresis debe ser superior al umbral inferior")
     
     #Suavizar la imagen con un filtro gaussiano
     smoothed_image =  gaussianFilter(inImage, sigma)
