@@ -42,7 +42,7 @@ def erode(inImage, SE, center=DEFAULT_CENTER):
                 outImage[i, j] = 1
 
     return outImage
-    
+
 
 '''
 outImage = dilate (inImage, SE, center=[])
@@ -124,6 +124,8 @@ def dilate(inImage, SE, center=DEFAULT_CENTER):
 
             if(paddedImage[i,j]) == 1:
                 outImage[i_min:i_max,j_min:j_max] = SE
+    
+    outImage = outImage | paddedImage
 
     return outImage[pad_y : paddedImage.shape[0] - (SE.shape[0] - center[0] - 1), pad_x : paddedImage.shape[1] - (SE.shape[1] - center[1] - 1)]
 
