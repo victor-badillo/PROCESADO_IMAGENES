@@ -6,22 +6,18 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     
-    inputImage = load_image('lady.png')
+    inputImage = load_image('circles.png')
+   
+    image = np.array([
+    [1, 0, 0, 0],
+    [1, 0, 0, 0],
+    [0, 1, 1, 0],
+    [0, 1, 0, 0],
+    [0, 1, 0, 0],
+    ], dtype=np.uint8)
 
-    #Caso 1 : Roberts
-    gx_roberts, gy_roberts = gradientImage(inputImage, 'Sobel')
-    #gx_roberts = adjustIntensity(gx_roberts)
-    #gy_roberts = adjustIntensity(gy_roberts)
-    #gx_roberts = np.clip(gx_roberts, 0, 1)
-    #gy_roberts = np.clip(gy_roberts, 0, 1)
-    roberts_x = np.array([[1, 0],
-                      [0, -1]], dtype=np.float32)
+    SE_1x3 = np.array([[1, 1]], dtype=np.uint8)
 
-    roberts_y = np.array([[0, 1],
-                        [-1, 0]], dtype=np.float32)
+    outImage = dilate(image, SE_1x3, center=[0,1])
 
-    # Aplicar el filtro de Roberts en X y Y
-    gx = cv2.filter2D(inputImage, cv2.CV_64F, roberts_x)
-    gy = cv2.filter2D(inputImage, cv2.CV_64F, roberts_y)
-    save_image_int('gx.png', gx_roberts)
-    save_image_int('gy.png', gy_roberts)
+    print(outImage)
