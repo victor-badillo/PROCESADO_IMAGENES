@@ -17,7 +17,8 @@ if __name__ == "__main__":
     ], dtype=np.uint8)
 
     SE_1x3 = np.array([[1, 1]], dtype=np.uint8)
+    SE_1x3_cero = np.array([[1, 0, 1]], dtype=np.uint8)
 
-    outImage = dilate(image, SE_1x3, center=[0,1])
+    outImage = dilate(image, SE_1x3_cero, center=[0,1])
 
     print(outImage)
