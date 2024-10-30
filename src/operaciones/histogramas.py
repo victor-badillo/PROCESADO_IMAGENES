@@ -73,6 +73,8 @@ def equalizeIntensity(inImage, nBins=DEFAULT_NBINS):
 
     #Calcular la función de distribución acumulativa(CDF)
     cdf = hist.cumsum()  #Sumar el histograma acumulativo
+    if cdf[-1] == 0:
+        return np.zeros_like(inImage)  # Evitar división por cero
     cdf_normalized = cdf / cdf[-1]  #Normalizar
 
     #Interpolacion
