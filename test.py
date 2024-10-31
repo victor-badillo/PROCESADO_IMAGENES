@@ -534,29 +534,29 @@ def test_gradientImage():
 
 def test_LoG():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'lady.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'lena.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
     inputImage = load_image(image_name)
 
-    #Caso 1 :sigma 1.0
-    sigma_1 = 0.1
+    #Caso 1 :sigma 0.5
+    sigma_1 = 0.5
     outImage_sigma_1 = LoG(inputImage, sigma_1)
     outImage_sigma_1 = adjustIntensity(outImage_sigma_1)
     #visualize_image_float(image_name_ext,outImage_sigma_1)
-    save_image_int(f'{image_name_ext}_LoG_sigma_1.png', outImage_sigma_1)
+    save_image_int(f'{image_name_ext}_LoG_sigma_{sigma_1}.png', outImage_sigma_1)
 
-    #Caso 2 :sigma 2.0
-    sigma_2 = 2.0
+    #Caso 2 :sigma 1.2
+    sigma_2 = 1.2
     outImage_sigma_2 = LoG(inputImage, sigma_2)
-    outImage_sigma_2 = adjustIntensity(outImage_sigma_2)
-    save_image_int(f'{image_name_ext}_LoG_sigma_2.png', outImage_sigma_2)
+    #outImage_sigma_2 = adjustIntensity(outImage_sigma_2)
+    save_image_int(f'{image_name_ext}_LoG_sigma_{sigma_2}.png', outImage_sigma_2)
 
     #Caso 3:sigma 3.0
     sigma_3 = 3.0
     outImage_sigma_3 = LoG(inputImage, sigma_3)
-    outImage_sigma_3 = adjustIntensity(outImage_sigma_3)
-    save_image_int(f'{image_name_ext}_LoG_sigma_3.png', outImage_sigma_3)
+    #outImage_sigma_3 = adjustIntensity(outImage_sigma_3)
+    save_image_int(f'{image_name_ext}_LoG_sigma_{sigma_3}.png', outImage_sigma_3)
 
     #Caso 4 :verificar que se lanza un ValueError cuando sigma es <= 0
     try:
