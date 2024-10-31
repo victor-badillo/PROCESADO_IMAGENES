@@ -1,5 +1,7 @@
 import numpy as np
 from src.operaciones import filterImage, gaussianFilter
+from utilidades import save_image_int, visualize_image_float
+from src.operaciones import adjustIntensity
 
 '''
 Implementar una función que permita obtener las componentes Gx y Gy del gradiente de una
@@ -57,6 +59,7 @@ outImage = LoG (inImage, sigma)
     inImage, outImage: ...
     sigma: Parámetro sigma de la Gaussiana
 '''
+'''
 def LoG(inImage, sigma):
     
     #Suavizar la imagen con un filtro gaussiano
@@ -71,6 +74,51 @@ def LoG(inImage, sigma):
     outImage = filterImage(smoothedImage, laplacianKernel)
     
     return outImage
+'''
+
+def LoG(inImage, sigma):
+
+    if sigma <= 0:
+        raise ValueError('El valor de sigma debe ser mayor que 0')
+
+    N = 2 * int(np.ceil(3 * sigma)) + 1
+    center = N // 2
+
+    kernel = np.zeros((N, N), dtype=np.float64)
+
+    for x in range(N):
+        for y in range(N):
+            # Coordenadas relativas al centro
+            x_dist = x - center
+            y_dist = y - center
+            # Fórmula de LoG
+            kernel[x, y] = ((x_dist**2 + y_dist**2 - sigma**2) / sigma**4) * np.exp(-(x_dist**2 + y_dist**2) / (2 * sigma**2))
+    
+    # Normalizar el kernel para que la suma sea aproximadamente cero
+    kernel -= kernel.mean()
+    #kernel /= np.sum(kernel)
+
+    #Convolucionar la imagen con el kernel calculado, sombrero mexicano
+    filteredImage = filterImage(inImage, kernel)
+
+    #Detectar cruces por cero
+    outImage = np.zeros_like(filteredImage)
+
+    threshold = 0.04
+
+    for i in range(1, filteredImage.shape[0] - 1):
+        for j in range(1, filteredImage.shape[1] - 1):
+
+            region = filteredImage[i-1:i+2, j-1:j+2]
+            pixel = filteredImage[i, j]
+            # Detectar cruce por cero en la vecindad
+            if pixel < -threshold and np.any(region[[0, 0, 0, 1, 1, 2, 2, 2], [0, 1, 2, 0, 2, 0, 1, 2]] > threshold):  # Excluyendo el central
+                    outImage[i, j] = 1
+    
+    return outImage
+
+
+
 
 
 
