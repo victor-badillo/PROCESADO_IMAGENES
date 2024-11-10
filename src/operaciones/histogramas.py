@@ -46,7 +46,7 @@ def adjustIntensity(inImage, inRange=DEFAULT_INRANGE, outRange=DEFAULT_OUTRANGE)
     
     omin, omax = outRange
 
-    out_image = (inImage - imin) * (omax - omin) / (imax - imin) + omin
+    out_image = (omax - omin) * (inImage - imin) / (imax - imin) + omin
 
     # Asegurar que el nuevo valor esté dentro del rango
     out_image = np.clip(out_image, omin, omax)
