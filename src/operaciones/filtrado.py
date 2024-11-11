@@ -73,15 +73,28 @@ outImage = gaussianFilter (inImage, sigma)
     zado simplemente convolucionando la imagen, primero, con un kernel Gaussiano unidi-
     mensional 1xN y, luego, convolucionando el resultado con el kernel transpuesto N x 1.
 '''
+# def gaussianFilter(inImage, sigma):
+    
+#     kernel_1d = gaussKernel1D(sigma)    #Calcular kernel
+
+#     #Convolución con el kernel 1xN
+#     intermediate_result = filterImage(inImage, kernel_1d.reshape(1, -1))    #-1 para que numpy detecte automaticamente el numero de la dimension
+    
+#     #Convolución con el kernel transpuesto N×1
+#     outImage = filterImage(intermediate_result, kernel_1d.reshape(-1, 1))
+    
+#     return outImage
+
 def gaussianFilter(inImage, sigma):
     
     kernel_1d = gaussKernel1D(sigma)    #Calcular kernel
+    kernel_1d = kernel_1d.reshape(1,-1) #Añadir dimension
 
     #Convolución con el kernel 1xN
-    intermediate_result = filterImage(inImage, kernel_1d.reshape(1, -1))    #-1 para que numpy detecte automaticamente el numero de la dimension
+    intermediate_result = filterImage(inImage, kernel_1d)
     
     #Convolución con el kernel transpuesto N×1
-    outImage = filterImage(intermediate_result, kernel_1d.reshape(-1, 1))
+    outImage = filterImage(intermediate_result, kernel_1d.T)
     
     return outImage
 
