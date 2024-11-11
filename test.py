@@ -68,6 +68,18 @@ def test_equalize_intensity():
 
     print("Las imágenes ecualizadas han sido guardadas con éxito.")
 
+def check_histogramas():
+    
+    for image in os.listdir(INPUT_IMAGES):
+        image_name = os.path.basename(INPUT_IMAGES + image)
+        image_name_ext = os.path.splitext(image_name)[0]
+        img = load_image(image_name)
+        dark_image = adjustIntensity(img, [], [0, 0.5])
+        light_image = adjustIntensity(img, [], [0.5, 1])
+        equalized_image = equalizeIntensity(img)
+        save_image_int(f'{image_name_ext}_adjust_dark.png', dark_image)
+        save_image_int(f'{image_name_ext}_adjust_light.png', light_image)
+        save_image_int(f'{image_name_ext}_equalized.png', equalized_image)
     
 def test_filterImage():
 
@@ -220,6 +232,23 @@ def test_medianFilter():
         print(f"Prueba pasada: {e}")
 
     print("Todos los tests de medianFilter han pasado.")
+
+
+def check_filtrado():
+    
+    for image in os.listdir(INPUT_IMAGES):
+        image_name = os.path.basename(INPUT_IMAGES + image)
+        image_name_ext = os.path.splitext(image_name)[0]
+        img = load_image(image_name)
+        kernel = np.array([[0.1,0.1,0.1],
+                           [0.1,0.2,0.1],
+                           [0.1,0.1,0.1]])
+        filteredImage = filterImage(img, kernel)
+        gaussian_image = gaussianFilter(img, 0.8)
+        median_image = medianFilter(img, 3)
+        save_image_int(f'{image_name_ext}_filter.png', filteredImage)
+        save_image_int(f'{image_name_ext}_gaussian.png', gaussian_image)
+        save_image_int(f'{image_name_ext}_median.png', median_image)
 
 
 def test_erode():
@@ -531,6 +560,27 @@ def test_gradientImage():
 
     print("Todas las pruebas de gradientImage han pasado con éxito.")
 
+def check_gradients():
+    for image in os.listdir(INPUT_IMAGES):
+        image_name = os.path.basename(INPUT_IMAGES + image)
+        image_name_ext = os.path.splitext(image_name)[0]
+        img = load_image(image_name)
+        gx_roberts, gy_roberts = gradientImage(img, 'Roberts')
+        gx_central, gy_central = gradientImage(img, 'CentralDiff')
+        gx_prewitt, gy_prewitt = gradientImage(img, 'Prewitt')
+        gx_sobel, gy_sobel = gradientImage(img, 'Sobel')
+        roberts = np.sqrt(gx_roberts**2 + gy_roberts**2)
+        central = np.sqrt(gx_central**2 + gy_central**2)
+        prewitt = np.sqrt(gx_prewitt**2 + gy_prewitt**2)
+        sobel = np.sqrt(gx_sobel**2 + gy_sobel**2)
+        canny = edgeCanny(img, 0.8, 0.1, 0.3)
+        log = LoG(img, 0.8)
+        save_image_int(f'{image_name_ext}_Roberts.png', roberts)
+        save_image_int(f'{image_name_ext}_Central.png', central)
+        save_image_int(f'{image_name_ext}_Prewitt.png', prewitt)
+        save_image_int(f'{image_name_ext}_Sobel.png', sobel)
+        save_image_int(f'{image_name_ext}_Canny.png', canny)
+        save_image_int(f'{image_name_ext}_Log.png', adjustIntensity(log))
 
 def test_LoG():
 
@@ -614,4 +664,7 @@ if __name__ == "__main__":
     #test_fill()
     #test_gradientImage()
     #test_LoG()
-    test_edgeCanny()
+    #test_edgeCanny()
+    #check_histogramas()
+    #check_filtrado()
+    check_gradients()
