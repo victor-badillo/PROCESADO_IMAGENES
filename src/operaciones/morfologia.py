@@ -87,47 +87,42 @@ def dilate(inImage, SE, center=DEFAULT_CENTER):
 
     return outImage
 '''
-
-
-def dilate(inImage, SE, center=DEFAULT_CENTER):
-
-    #Verificar que el SE tiene dimensiones validas
+def dilate(inImage, SE, center=None):
+    # Verificar que el SE tiene dimensiones válidas
     if SE.shape[0] < 1 or SE.shape[1] < 1:
-        raise ValueError("El SE debe tener al menos dimension 1x1")
+        raise ValueError("El SE debe tener al menos dimensión 1x1")
     
-    #Calcular centro si no se especifica uno
-    if not center:
+    # Calcular centro si no se especifica uno
+    if center is None:
         center = [SE.shape[0] // 2, SE.shape[1] // 2]  # Centro geométrico por defecto
 
-    #Verificar que el centro no se sale del SE
+    # Verificar que el centro no se sale del SE
     if (center[0] < 0 or center[0] >= SE.shape[0]) or (center[1] < 0 or center[1] >= SE.shape[1]):
         raise ValueError("El centro del elemento estructurante se sale del SE")
 
-    
-
-    #Calcular el padding basado en el centro del SE
+    # Calcular el padding basado en el centro del SE
     pad_y = center[0]
     pad_x = center[1]
 
-    #Añadir padding de tipo constante con 0
+    # Añadir padding de tipo constante con 0
     paddedImage = np.pad(inImage, ((pad_y, SE.shape[0] - center[0] - 1), (pad_x, SE.shape[1] - center[1] - 1)), mode='constant', constant_values=0)
-    outImage = np.zeros_like(paddedImage)
+    outImage = np.zeros_like(paddedImage, dtype=np.uint8)
 
-    #Dilatación
-    for i in range(paddedImage.shape[0]):
-        for j in range(paddedImage.shape[1]):
+    # Dilatación
+    for i in range(pad_y, paddedImage.shape[0] - (SE.shape[0] - center[0] - 1)):
+        for j in range(pad_x, paddedImage.shape[1] - (SE.shape[1] - center[1] - 1)):
 
-            i_min = i - pad_y
-            i_max = i + SE.shape[0] - center[0]
-            j_min = j - pad_x
-            j_max = j + SE.shape[1] - center[1]
+            # Aplicar el elemento estructurante SE donde el píxel es 1
+            if paddedImage[i, j] == 1:
+                i_min = i - pad_y
+                i_max = i_min + SE.shape[0]
+                j_min = j - pad_x
+                j_max = j_min + SE.shape[1]
+                
+                # Realizar la operación bitwise OR con conversión a enteros
+                outImage[i_min:i_max, j_min:j_max] = np.bitwise_or(outImage[i_min:i_max, j_min:j_max], SE.astype(np.uint8))
 
-            if(paddedImage[i,j]) == 1:
-                outImage[i_min:i_max,j_min:j_max] = SE | outImage[i_min:i_max,j_min:j_max]
-    
-    #outImage = outImage | paddedImage #Creo que esta mal, lo que tengo que hacer en cada paso del bucle
-    #es hacer la union de la region con el SE y lo que ya habia antes en outImage
-
+    # Recortar la imagen a su tamaño original
     return outImage[pad_y : paddedImage.shape[0] - (SE.shape[0] - center[0] - 1), pad_x : paddedImage.shape[1] - (SE.shape[1] - center[1] - 1)]
 
 
