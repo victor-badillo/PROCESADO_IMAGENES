@@ -46,7 +46,7 @@ Funcion para guardar imagen, imagen [0,255]
 def save_image_int(image_name, image):
 
     img_path = OUTPUT_IMAGES + image_name
-    success = cv2.imwrite(img_path,(image * 255).astype(np.uint8))
+    success = cv2.imwrite(img_path,image * 255)
 
     if success:
         print("La imagen ==> " + image_name + " ==> se guardó correctamente.")
