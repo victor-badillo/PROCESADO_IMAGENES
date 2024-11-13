@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from utilidades import load_image, save_image_int, visualize_image_float
+from utilidades import load_image, save_image_int, visualize_image
 from src import adjustIntensity, equalizeIntensity, filterImage, gaussKernel1D, gaussianFilter, medianFilter, erode, dilate, opening, closing, fill, gradientImage, LoG, edgeCanny
 from configuracion import INPUT_IMAGES
 import cv2
@@ -14,7 +14,7 @@ def test_adjustIntensity():
 
     #Caso 1:uso de parámetros por defecto
     out_image_default = adjustIntensity(in_image)
-    #visualize_image_float(image_name_ext, out_image_default)
+    #visualize_image(image_name_ext, out_image_default)
     save_image_int(f'{image_name_ext}_adjust_default.png', out_image_default)
 
     #Caso 2:ajuste del rango de intensidad de entrada
@@ -45,7 +45,7 @@ def test_equalize_intensity():
 
     #Caso 1:uso de parámetros por defecto
     out_image_default = equalizeIntensity(in_image)
-    #visualize_image_float(image_name_ext, out_image_default)
+    #visualize_image(image_name_ext, out_image_default)
     save_image_int(f'{image_name_ext}_equalize_default.png', out_image_default)
 
     #Caso 2:uso de un número menor de bins
@@ -115,7 +115,7 @@ def test_filterImage():
 
         out_image = filterImage(in_image, kernel)
         out_image = adjustIntensity(out_image)  #Renormalizacion
-        #visualize_image_float(image_name_ext, out_image)
+        #visualize_image(image_name_ext, out_image)
         
         save_image_int(f'{image_name_ext}_{kernel_name}.png', out_image)
 
@@ -188,7 +188,7 @@ def test_gaussianFilter():
     for sigma in sigma_values:
         outImage = gaussianFilter(inImage, sigma)
         outImage = adjustIntensity(outImage)    #Renormalizar
-        #visualize_image_float(image_name_ext, outImage)
+        #visualize_image(image_name_ext, outImage)
         save_image_int(f'{image_name_ext}_gauss_{sigma}.png', outImage)
 
         assert outImage.shape == inImage.shape, f"La imagen de salida debería tener el mismo tamaño que la imagen de entrada para sigma = {sigma}."
@@ -218,7 +218,7 @@ def test_medianFilter():
     for filterSize in [3, 5, 7, 9, 11, 23, 53, 4]:
         outImage = medianFilter(inImage, filterSize)
         outImage = adjustIntensity(outImage)
-        #visualize_image_float(image_name_ext,outImage )
+        #visualize_image(image_name_ext,outImage )
         save_image_int(f'{image_name_ext}_median_{filterSize}.png', outImage)
 
         assert outImage.shape == inImage.shape, f"La imagen de salida debería tener el mismo tamaño que la imagen de entrada para filterSize = {filterSize}."
@@ -268,7 +268,7 @@ def test_erode():
     #Caso 2 :erosión con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = erode(inputImage, SE_1x3)
-    #visualize_image_float(image_name_ext, outImage_1x3)
+    #visualize_image(image_name_ext, outImage_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :erosión con un SE vertical 3x1 y centro predeterminado
@@ -351,7 +351,7 @@ def test_dilate():
     #Caso 2 :dilatación con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
     outImage_1x3 = dilate(inputImage, SE_1x3)
-    #visualize_image_float(image_name_ext, outImage_1x3)
+    #visualize_image(image_name_ext, outImage_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :dilatación con un SE vertical 3x1 y centro predeterminado
@@ -446,7 +446,7 @@ def test_opening():
     #Caso 2 :opening con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = opening(inputImage, SE_1x3)
-    #visualize_image_float(image_name_ext, outImage_1x3)
+    #visualize_image(image_name_ext, outImage_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :opening con un SE vertical 3x1 y centro predeterminado
@@ -498,7 +498,7 @@ def test_closing():
     #Caso 2 :closing con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = closing(inputImage, SE_1x3)
-    #visualize_image_float(image_name_ext, outImage_1x3)
+    #visualize_image(image_name_ext, outImage_1x3)
     save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :closing con un SE vertical 3x1 y centro predeterminado
@@ -543,7 +543,7 @@ def test_fill():
     #Caso 1 :fill con un SE por defecto , centro por defecto y una semilla
     seeds = [(13, 9)]
     outImage_default = fill(inputImage, seeds)
-    #visualize_image_float(image_name_ext,outImage_default)
+    #visualize_image(image_name_ext,outImage_default)
     save_image_int(f'{image_name_ext}_fill_default.png', outImage_default)
 
     #Caso 2 :fill con varias semillas en diferentes agujeros de la letra 'B'
@@ -596,7 +596,7 @@ def test_gradientImage():
     gx_roberts, gy_roberts = gradientImage(inputImage, 'Roberts')
     gx_roberts = np.clip(gx_roberts,0,1)
     gy_roberts = np.clip(gy_roberts,0,1)
-    #visualize_image_float(image_name_ext,gx_roberts)
+    #visualize_image(image_name_ext,gx_roberts)
     save_image_int(f'{image_name_ext}_gradient_roberts_gx.png', gx_roberts)
     save_image_int(f'{image_name_ext}_gradient_roberts_gy.png', gy_roberts)
 
@@ -662,7 +662,7 @@ def test_LoG():
     sigma_1 = 0.5
     outImage_sigma_1 = LoG(inputImage, sigma_1)
     outImage_sigma_1 = adjustIntensity(outImage_sigma_1)
-    #visualize_image_float(image_name_ext,outImage_sigma_1)
+    #visualize_image(image_name_ext,outImage_sigma_1)
     save_image_int(f'{image_name_ext}_LoG_sigma_{sigma_1}.png', outImage_sigma_1)
 
     #Caso 2 :sigma 1.2
@@ -706,7 +706,7 @@ def test_edgeCanny():
     for sigma, tlow, thigh, output_filename in test_cases:
 
         outImage = edgeCanny(inputImage, sigma, tlow, thigh)
-        #visualize_image_float(image_name_ext, outImage)
+        #visualize_image(image_name_ext, outImage)
         save_image_int(f'{image_name_ext}_{output_filename}', outImage)
 
     #Caso 7 :verificar que se lanza un ValueError cuando thigh < tlow

@@ -24,7 +24,7 @@ def load_image(image_name):
 '''
 Funcion para visualizar imagen, imagen [0,1]
 '''
-def visualize_image_float(title, image):
+def visualize_image(title, image):
     
     cv2.imshow(title, image )
     cv2.waitKey(0)
