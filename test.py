@@ -33,7 +33,7 @@ def test_adjustIntensity():
     out_image_full = adjustIntensity(in_image, inRange=in_range, outRange=out_range)
     save_image(f'{image_name_ext}_adjust_full.png', out_image_full)
 
-    print("Las imágenes ajustadas han sido guardadas con éxito.")
+    print("Todos los test de adjustIntensity han pasado con éxito.")
 
 
 def test_equalize_intensity():
@@ -64,9 +64,9 @@ def test_equalize_intensity():
         nBins_high = -10
         out_image_error = equalizeIntensity(in_image, nBins=nBins_high)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
-    print("Las imágenes ecualizadas han sido guardadas con éxito.")
+    print("Todas las pruebas de equalizeIntensity han pasado con éxito.")
 
     
 def test_filterImage():
@@ -114,7 +114,7 @@ def test_filterImage():
     out_zero_image = filterImage(zero_image, kernels.get("average_3x3"))
     assert np.all(out_zero_image == 0), "La imagen de salida debería ser toda ceros."
 
-    print("Todas las pruebas con múltiples kernels han pasado con éxito.")
+    print("Todas las pruebas de filterImage han pasado con éxito.")
 
 
 def test_gaussKernel1D():
@@ -148,15 +148,15 @@ def test_gaussKernel1D():
     assert len(kernel) == 2 * int(np.ceil(3 * sigma)) + 1, f"El tamaño del kernel debería ser {N} para sigma = {sigma}."
     assert np.isclose(np.sum(kernel), 1, atol=1e-5), f"La suma del kernel debería ser aproximadamente 1, pero fue {np.sum(kernel)}."
 
-    #Caso 6: Verificar que se lanza un ValueError cuando sigma es <= 0
+    #Caso 6:verificar que se lanza un ValueError cuando sigma es <= 0
     try:
         
         invalid_sigma = -1
         out_image_error = gaussKernel1D(invalid_sigma)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
-    print("Todos los tests han pasado con éxito.")
+    print("Todos los tests de gaussKernel1D han pasado con éxito.")
 
 
 def test_gaussianFilter():
@@ -181,7 +181,7 @@ def test_gaussianFilter():
 
         assert outImage.shape == inImage.shape, f"La imagen de salida debería tener el mismo tamaño que la imagen de entrada para sigma = {sigma}."
 
-    print("Todos los tests de gaussianFilter han pasado.")
+    print("Todos los tests de gaussianFilter han pasado con éxito.")
 
 
 def test_medianFilter():
@@ -199,7 +199,7 @@ def test_medianFilter():
     assert np.all(outImage >= 0) and np.all(outImage <= 1), "Los valores de la imagen filtrada deberían estar en el rango [0, 1]."
 
     #Caso 3 :test con diferentes valores de filterSize
-    image_name = os.path.basename(INPUT_IMAGES + 'circlesSP.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'image2.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
     inImage = load_image(image_name)
@@ -217,27 +217,9 @@ def test_medianFilter():
         filterSize = -10
         out_image_error = medianFilter(inImage, filterSize)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
-    print("Todos los tests de medianFilter han pasado.")
-
-
-def check_filtrado():
-    
-    for image in os.listdir(INPUT_IMAGES):
-        image_name = os.path.basename(INPUT_IMAGES + image)
-        image_name_ext = os.path.splitext(image_name)[0]
-        img = load_image(image_name)
-        kernel = np.array([[0.1,0.1,0.1],
-                           [0.1,0.2,0.1],
-                           [0.1,0.1,0.1]])
-        filteredImage = filterImage(img, kernel)
-        gaussian_image = gaussianFilter(img, 0.8)
-        median_image = medianFilter(img, 3)
-        save_image(f'{image_name_ext}_filter.png', filteredImage)
-        save_image(f'{image_name_ext}_gaussian.png', gaussian_image)
-        save_image(f'{image_name_ext}_median.png', median_image)
-
+    print("Todos los tests de medianFilter han pasado con éxito.")
 
 def test_erode():
 
@@ -714,7 +696,7 @@ if __name__ == "__main__":
     #test_gaussKernel1D()
     #test_gaussianFilter()
     #test_medianFilter()
-    #test_erode()
+    test_erode()
     #test_dilate()
     #test_opening()
     #test_closing()
@@ -722,5 +704,4 @@ if __name__ == "__main__":
     #test_gradientImage()
     #test_LoG()
     #test_edgeCanny()
-    #check_filtrado()
     #check_gradients()
