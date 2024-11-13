@@ -41,7 +41,7 @@ def erode(inImage, SE, center=DEFAULT_CENTER):
             if np.all(region[SE == 1] == 1):    #Si todos son 1, entonces es 1 sino es un 0
                 outImage[i, j] = 1
 
-    return outImage
+    return outImage.astype(np.float64)
 
 
 '''
@@ -52,48 +52,14 @@ outImage = dilate (inImage, SE, center=[])
         la esquina superior izquierda. Si es un vector vacío (valor por defecto), el centro
         se calcula como (⌊P/2⌋ + 1, ⌊Q/2⌋ + 1).
 '''
-'''
 def dilate(inImage, SE, center=DEFAULT_CENTER):
-
-    #Verificar que el SE tiene dimensiones validas
-    if SE.shape[0] < 1 or SE.shape[1] < 1:
-        raise ValueError("El SE debe tener al menos dimension 1x1")
     
-    #Calcular centro si no se especifica uno
-    if not center:
-        center = [SE.shape[0] // 2, SE.shape[1] // 2]  # Centro geométrico por defecto
-
-    #Verificar que el centro no se sale del SE
-    if (center[0] < 0 or center[0] >= SE.shape[0]) or (center[1] < 0 or center[1] >= SE.shape[1]):
-        raise ValueError("El centro del elemento estructurante se sale del SE")
-
-    outImage = np.zeros_like(inImage)
-
-    #Calcular el padding basado en el centro del SE
-    pad_y = center[0]
-    pad_x = center[1]
-
-    #Añadir padding de tipo constante con 0
-    paddedImage = np.pad(inImage, ((pad_y, SE.shape[0] - center[0] - 1), (pad_x, SE.shape[1] - center[1] - 1)), mode='constant', constant_values=0)
-
-    #Dilatación
-    for i in range(outImage.shape[0]):
-        for j in range(outImage.shape[1]):
-
-            region = paddedImage[i:i + SE.shape[0], j:j + SE.shape[1]]
-
-            if np.any(region[SE == 1] == 1):    #Si alguno es 1, entonces es 1 sino 0
-                outImage[i, j] = 1
-
-    return outImage
-'''
-def dilate(inImage, SE, center=None):
     # Verificar que el SE tiene dimensiones válidas
     if SE.shape[0] < 1 or SE.shape[1] < 1:
         raise ValueError("El SE debe tener al menos dimensión 1x1")
     
     # Calcular centro si no se especifica uno
-    if center is None:
+    if not center:
         center = [SE.shape[0] // 2, SE.shape[1] // 2]  # Centro geométrico por defecto
 
     # Verificar que el centro no se sale del SE
@@ -120,10 +86,10 @@ def dilate(inImage, SE, center=None):
                 j_max = j_min + SE.shape[1]
                 
                 # Realizar la operación bitwise OR con conversión a enteros
-                outImage[i_min:i_max, j_min:j_max] = np.bitwise_or(outImage[i_min:i_max, j_min:j_max], SE.astype(np.uint8))
+                outImage[i_min:i_max, j_min:j_max] = SE | outImage[i_min:i_max,j_min:j_max]
 
-    # Recortar la imagen a su tamaño original
-    return outImage[pad_y : paddedImage.shape[0] - (SE.shape[0] - center[0] - 1), pad_x : paddedImage.shape[1] - (SE.shape[1] - center[1] - 1)]
+    #Devolver imagen sin el padding añadido para operar
+    return outImage[pad_y : paddedImage.shape[0] - (SE.shape[0] - center[0] - 1), pad_x : paddedImage.shape[1] - (SE.shape[1] - center[1] - 1)].astype(np.float64)
 
 
 
@@ -184,7 +150,6 @@ def fill(inImage, seeds, SE=DEFAULT_SE, center=DEFAULT_CENTER):
     inImageX = (inImage).astype(np.uint8) 
     Ac = 1 - inImageX
 
-    
     while True:
 
         #Dilatacion
@@ -192,7 +157,7 @@ def fill(inImage, seeds, SE=DEFAULT_SE, center=DEFAULT_CENTER):
         outImage = dilate(outImage, SE, center)
         
         #Interseccion con el complemetario de inImage
-        outImage = outImage & Ac
+        outImage = outImage.astype(np.uint8) & Ac
 
         #Para de iterar si no hay cambios
         if np.array_equal(outImage, prev_outImage):
@@ -200,6 +165,5 @@ def fill(inImage, seeds, SE=DEFAULT_SE, center=DEFAULT_CENTER):
 
     #Unir resultado con imagen original 
     outImage = outImage | inImageX
-    outImage = outImage.astype(inImage.dtype) #Volver al tipo original , float64
 
-    return outImage
+    return outImage.astype(np.float64)

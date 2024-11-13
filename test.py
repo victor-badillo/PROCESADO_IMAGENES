@@ -264,14 +264,14 @@ def test_erode():
         invalid_center = [3, 1]
         outImage_invalid_center = erode(inputImage, SE_square, center=invalid_center)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
     #Caso 7 :verificar que se lanza un ValueError cuando el SE es vacio
     try:
         invalid_SE = np.array([], dtype=np.uint8)
         outImage_invalid_SE = erode(inputImage, invalid_SE)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
 
     #Caso 8 : erosion de example_slides con SE_1x2 y centro en (0,0)
@@ -281,7 +281,7 @@ def test_erode():
         [0, 1, 1, 0],
         [0, 1, 0, 0],
         [0, 1, 0, 0],
-    ], dtype=np.uint8)
+    ], dtype=np.float64)
 
     SE_1x2 = np.array([[1, 1]], dtype=np.uint8)
     outImage_slides_1x2_center = erode(example_slides, SE_1x2, center=(0,0))
@@ -293,15 +293,15 @@ def test_erode():
         [0, 1, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
-    ], dtype=np.uint8)
+    ], dtype=np.float64)
 
     # Verificar que la salida sea igual al resultado esperado
     if np.array_equal(outImage_slides_1x2_center, expected_output_1x2):
-        print("Prueba pasada: El resultado es el esperado para example_slides con SE_1x2 y centro en (0,0).")
+        print("Prueba pasada con éxito: El resultado es el esperado para example_slides con SE_1x2 y centro en (0,0).")
     else:
         print("Prueba fallida: La salida no coincide con el resultado esperado.")
 
-    print("Todas las pruebas de erosión han pasado con éxito.")
+    print("Todos los tests de erode han pasado con éxito.")
 
 
 def test_dilate():
@@ -344,14 +344,14 @@ def test_dilate():
         invalid_center = [3, 1]
         outImage_invalid_center = dilate(inputImage, SE_square, center=invalid_center)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
     #Caso 7 :verificar que se lanza un ValueError cuando el SE es vacio
     try:
-        invalid_SE = np.array([], dtype=np.uint8)
+        invalid_SE = np.array([], dtype=np.float64)
         outImage_invalid_SE = erode(inputImage, invalid_SE)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
 
     #Caso 8 y 9: dilatación de example_slides con SE_1x3_cero y SE_1x2 y centro en (0,0)
@@ -361,7 +361,7 @@ def test_dilate():
         [0, 1, 1, 0],
         [0, 1, 0, 0],
         [0, 1, 0, 0],
-    ], dtype=np.uint8)
+    ], dtype=np.float64)
 
     SE_1x3_cero = np.array([[1, 0, 1]], dtype=np.uint8)
     outImage_slides_1x3 = dilate(example_slides, SE_1x3_cero)
@@ -375,7 +375,7 @@ def test_dilate():
         [1, 1, 1, 1],
         [1, 0, 1, 0],
         [1, 0, 1, 0]
-    ], dtype=np.uint8)
+    ], dtype=np.float64)
 
     expected_output_1x2 = np.array([
         [1, 1, 0, 0],
@@ -383,20 +383,20 @@ def test_dilate():
         [0, 1, 1, 1],
         [0, 1, 1, 0],
         [0, 1, 1, 0]
-    ], dtype=np.uint8)
+    ], dtype=np.float64)
 
     # Verificar que la salida sea igual al resultado esperado
     if np.array_equal(outImage_slides_1x3, expected_output_1x3):
-        print("Prueba pasada: El resultado es el esperado para example_slides con SE_1x3_cero.")
+        print("Prueba pasada con éxito: El resultado es el esperado para example_slides con SE_1x3_cero.")
     else:
         print("Prueba fallida: La salida no coincide con el resultado esperado.")
 
     if np.array_equal(outImage_slides_1x2_center, expected_output_1x2):
-        print("Prueba pasada: El resultado es el esperado para example_slides con SE_1x2 y centro en (0,0).")
+        print("Prueba pasada con éxito: El resultado es el esperado para example_slides con SE_1x2 y centro en (0,0).")
     else:
         print("Prueba fallida: La salida no coincide con el resultado esperado.")
 
-    print("Todas las pruebas de dilatación han pasado con éxito.")
+    print("Todos los tests de dilate han pasado con éxito.")
 
 
 def test_opening():
@@ -448,7 +448,7 @@ def test_opening():
     except ValueError as e:
         print(f"Prueba pasada: {e}")
 
-    print("Todas las pruebas de opening han pasado con éxito.")
+    print("Todos los tests de opening han pasado con éxito.")
 
 
 def test_closing():
@@ -500,7 +500,7 @@ def test_closing():
     except ValueError as e:
         print(f"Prueba pasada: {e}")
 
-    print("Todas las pruebas de closing han pasado con éxito.")
+    print("Todos los tests de closing han pasado con éxito.")
 
 
 def test_fill():
@@ -543,16 +543,16 @@ def test_fill():
         invalid_center = [3, 1]
         outImage_invalid_center = fill(inputImage, seeds, SE=SE_square, center=invalid_center)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
     #Caso 7 :verificar que se lanza un ValueError cuando hay una semilla fuera de los limites de la imagen
     try:
         invalid_seed = [(-10,-10)]
         outImage_invalid_seed = fill(inputImage, invalid_seed)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
     
-    print("Todas las pruebas de fill han pasado con éxito.")
+    print("Todos los tests de fill han pasado con éxito.")
 
 
 def test_gradientImage():
@@ -696,11 +696,11 @@ if __name__ == "__main__":
     #test_gaussKernel1D()
     #test_gaussianFilter()
     #test_medianFilter()
-    test_erode()
+    #test_erode()
     #test_dilate()
     #test_opening()
     #test_closing()
-    #test_fill()
+    test_fill()
     #test_gradientImage()
     #test_LoG()
     #test_edgeCanny()
