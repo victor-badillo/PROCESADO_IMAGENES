@@ -1,7 +1,5 @@
 import numpy as np
 from src.operaciones import filterImage, gaussianFilter
-from src.operaciones import adjustIntensity
-
 '''
 Implementar una función que permita obtener las componentes Gx y Gy del gradiente de una
 imagen, pudiendo elegir entre los operadores de Roberts, CentralDiff (Diferencias centrales
