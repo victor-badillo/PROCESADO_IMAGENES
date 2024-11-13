@@ -2,27 +2,6 @@ import numpy as np
 from configuracion import DEFAULT_INRANGE, DEFAULT_OUTRANGE, DEFAULT_NBINS
 from utilidades import histogram
 
-'''
-def adjustIntensity(inImage, inRange=DEFAULT_INRANGE, outRange=DEFAULT_OUTRANGE):
-    
-    if not inRange: #Si no se especifica inRange utilizar el min y max de la imagen de entrada
-        imin = np.min(inImage)
-        imax = np.max(inImage)
-    else:
-        imin, imax = inRange
-    
-    omin, omax = outRange
-    outImage = np.zeros_like(inImage)   #Matriz de zeros de mismas dimensiones que inImage
-    
-    for i in range(inImage.shape[0]):
-        for j in range(inImage.shape[1]):
-
-            newValue = (inImage[i, j] - imin) * (omax - omin) / (imax - imin) + omin
-            #Renormalización
-            outImage[i, j] = np.clip(newValue, omin, omax) #Asegurar que el nuevo valor este dentro del rango
-
-    return outImage
-'''
 
 '''
 Funcion para ajustar la intensidad de una imagen
@@ -46,9 +25,9 @@ def adjustIntensity(inImage, inRange=DEFAULT_INRANGE, outRange=DEFAULT_OUTRANGE)
     
     omin, omax = outRange
 
-    out_image = (omax - omin) * (inImage - imin) / (imax - imin) + omin
+    out_image = (omax - omin) * (inImage - imin) / (imax - imin) + omin #Modificacion
 
-    # Asegurar que el nuevo valor esté dentro del rango
+    #Asegurar que siga en el rango
     out_image = np.clip(out_image, omin, omax)
 
     return out_image
@@ -74,14 +53,14 @@ def equalizeIntensity(inImage, nBins=DEFAULT_NBINS):
     #Calcular la función de distribución acumulativa(CDF)
     cdf = hist.cumsum()  #Sumar el histograma acumulativo
     if cdf[-1] == 0:
-        return np.zeros_like(inImage)  # Evitar división por cero
+        return np.zeros_like(inImage)  #Evitar división por cero
     cdf_normalized = cdf / cdf[-1]  #Normalizar
 
     #Interpolacion
-    out_image = np.interp(inImage.flatten(), bin_edges[:-1], cdf_normalized)  #Usar los límites de los bins, el ultimo no , representa un limite inferior
+    out_image = np.interp(inImage.flatten(), bin_edges[:-1], cdf_normalized)  #Usar los límites de los bins, el ultimo no ,representa un limite inferior
     out_image = out_image.reshape(inImage.shape)  #Devolver forma original a la imagen modificada
 
-    out_image = adjustIntensity(out_image) #Renormalizar
+    out_image = adjustIntensity(out_image) #Renormalizar para visualizar correctamente
 
     return out_image
 
