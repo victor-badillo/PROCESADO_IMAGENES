@@ -22,16 +22,6 @@ def load_image(image_name):
 
 
 '''
-Funcion para visualizar imagen, imagen [0,255]
-'''
-def visualize_image_int(title, image):
-    
-    cv2.imshow(title, (image * 255).astype(np.uint8) )
-    cv2.waitKey(0) 
-    cv2.destroyAllWindows()
-
-
-'''
 Funcion para visualizar imagen, imagen [0,1]
 '''
 def visualize_image_float(title, image):
