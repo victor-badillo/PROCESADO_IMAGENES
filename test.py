@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from utilidades import load_image, save_image_int, visualize_image
+from utilidades import load_image, save_image, visualize_image
 from src import adjustIntensity, equalizeIntensity, filterImage, gaussKernel1D, gaussianFilter, medianFilter, erode, dilate, opening, closing, fill, gradientImage, LoG, edgeCanny
 from configuracion import INPUT_IMAGES
 import cv2
@@ -15,23 +15,23 @@ def test_adjustIntensity():
     #Caso 1:uso de parámetros por defecto
     out_image_default = adjustIntensity(in_image)
     #visualize_image(image_name_ext, out_image_default)
-    save_image_int(f'{image_name_ext}_adjust_default.png', out_image_default)
+    save_image(f'{image_name_ext}_adjust_default.png', out_image_default)
 
     #Caso 2:ajuste del rango de intensidad de entrada
     in_range = [0.2, 0.8]
     out_image_in_range = adjustIntensity(in_image, inRange=in_range)
-    save_image_int(f'{image_name_ext}_adjust_in_range.png', out_image_in_range)
+    save_image(f'{image_name_ext}_adjust_in_range.png', out_image_in_range)
 
     #Caso 3:ajuste del rango de intensidad de salida
     out_range = [0.1, 0.9]
     out_image_out_range = adjustIntensity(in_image, outRange=out_range)
-    save_image_int(f'{image_name_ext}_adjust_out_range.png', out_image_out_range)
+    save_image(f'{image_name_ext}_adjust_out_range.png', out_image_out_range)
 
     #Caso 4:ajuste tanto de rango de entrada como de salida
     in_range = [0.1, 0.7]
     out_range = [0.0, 0.5]
     out_image_full = adjustIntensity(in_image, inRange=in_range, outRange=out_range)
-    save_image_int(f'{image_name_ext}_adjust_full.png', out_image_full)
+    save_image(f'{image_name_ext}_adjust_full.png', out_image_full)
 
     print("Las imágenes ajustadas han sido guardadas con éxito.")
 
@@ -46,17 +46,17 @@ def test_equalize_intensity():
     #Caso 1:uso de parámetros por defecto
     out_image_default = equalizeIntensity(in_image)
     #visualize_image(image_name_ext, out_image_default)
-    save_image_int(f'{image_name_ext}_equalize_default.png', out_image_default)
+    save_image(f'{image_name_ext}_equalize_default.png', out_image_default)
 
     #Caso 2:uso de un número menor de bins
     nBins_custom = 128
     out_image_custom_bins = equalizeIntensity(in_image, nBins=nBins_custom)
-    save_image_int(f'{image_name_ext}_equalize_low_bins.png', out_image_custom_bins)
+    save_image(f'{image_name_ext}_equalize_low_bins.png', out_image_custom_bins)
 
     #Caso 3:uso de un número mayor de bins
     nBins_high = 512
     out_image_high_bins = equalizeIntensity(in_image, nBins=nBins_high)
-    save_image_int(f'{image_name_ext}_equalize_high_bins.png', out_image_high_bins)
+    save_image(f'{image_name_ext}_equalize_high_bins.png', out_image_high_bins)
 
     #Caso 4: Verificar que se lanza un ValueError cuando el numero de bins es <= 0
     try:
@@ -77,9 +77,9 @@ def check_histogramas():
         dark_image = adjustIntensity(img, [], [0, 0.5])
         light_image = adjustIntensity(img, [], [0.5, 1])
         equalized_image = equalizeIntensity(img)
-        save_image_int(f'{image_name_ext}_adjust_dark.png', dark_image)
-        save_image_int(f'{image_name_ext}_adjust_light.png', light_image)
-        save_image_int(f'{image_name_ext}_equalized.png', equalized_image)
+        save_image(f'{image_name_ext}_adjust_dark.png', dark_image)
+        save_image(f'{image_name_ext}_adjust_light.png', light_image)
+        save_image(f'{image_name_ext}_equalized.png', equalized_image)
     
 def test_filterImage():
 
@@ -117,7 +117,7 @@ def test_filterImage():
         out_image = adjustIntensity(out_image)  #Renormalizacion
         #visualize_image(image_name_ext, out_image)
         
-        save_image_int(f'{image_name_ext}_{kernel_name}.png', out_image)
+        save_image(f'{image_name_ext}_{kernel_name}.png', out_image)
 
         assert out_image.shape == in_image.shape, f"La imagen de salida para el kernel {kernel_name} no tiene el mismo tamaño que la de entrada."
 
@@ -189,7 +189,7 @@ def test_gaussianFilter():
         outImage = gaussianFilter(inImage, sigma)
         outImage = adjustIntensity(outImage)    #Renormalizar
         #visualize_image(image_name_ext, outImage)
-        save_image_int(f'{image_name_ext}_gauss_{sigma}.png', outImage)
+        save_image(f'{image_name_ext}_gauss_{sigma}.png', outImage)
 
         assert outImage.shape == inImage.shape, f"La imagen de salida debería tener el mismo tamaño que la imagen de entrada para sigma = {sigma}."
 
@@ -219,7 +219,7 @@ def test_medianFilter():
         outImage = medianFilter(inImage, filterSize)
         outImage = adjustIntensity(outImage)
         #visualize_image(image_name_ext,outImage )
-        save_image_int(f'{image_name_ext}_median_{filterSize}.png', outImage)
+        save_image(f'{image_name_ext}_median_{filterSize}.png', outImage)
 
         assert outImage.shape == inImage.shape, f"La imagen de salida debería tener el mismo tamaño que la imagen de entrada para filterSize = {filterSize}."
 
@@ -246,9 +246,9 @@ def check_filtrado():
         filteredImage = filterImage(img, kernel)
         gaussian_image = gaussianFilter(img, 0.8)
         median_image = medianFilter(img, 3)
-        save_image_int(f'{image_name_ext}_filter.png', filteredImage)
-        save_image_int(f'{image_name_ext}_gaussian.png', gaussian_image)
-        save_image_int(f'{image_name_ext}_median.png', median_image)
+        save_image(f'{image_name_ext}_filter.png', filteredImage)
+        save_image(f'{image_name_ext}_gaussian.png', gaussian_image)
+        save_image(f'{image_name_ext}_median.png', median_image)
 
 
 def test_erode():
@@ -263,18 +263,18 @@ def test_erode():
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)
     outImage_default = erode(inputImage, SE_square)
-    save_image_int(f'{image_name_ext}_default.png', outImage_default)
+    save_image(f'{image_name_ext}_default.png', outImage_default)
 
     #Caso 2 :erosión con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = erode(inputImage, SE_1x3)
     #visualize_image(image_name_ext, outImage_1x3)
-    save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
+    save_image(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :erosión con un SE vertical 3x1 y centro predeterminado
     SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)
     outImage_3x1 = erode(inputImage, SE_3x1)
-    save_image_int(f'{image_name_ext}_3x1.png', outImage_3x1)
+    save_image(f'{image_name_ext}_3x1.png', outImage_3x1)
 
     #Caso 4 :erosión con un SE cuadrado 3x3 y un centro personalizado
     SE_square = np.array([[1, 1, 1],
@@ -282,12 +282,12 @@ def test_erode():
                           [1, 1, 1]], dtype=np.uint8)
     custom_center = [1, 1]
     outImage_custom_center = erode(inputImage, SE_square, center=custom_center)
-    save_image_int(f'{image_name_ext}_custom_center.png', outImage_custom_center)
+    save_image(f'{image_name_ext}_custom_center.png', outImage_custom_center)
 
     # Caso 5 :erosión con un EE 3x3 y un centro en la esquina inferior derecha
     custom_center_edge = [2, 2]
     outImage_edge_center = erode(inputImage, SE_square, center=custom_center_edge)
-    save_image_int(f'{image_name_ext}_edge_center.png', outImage_edge_center)
+    save_image(f'{image_name_ext}_edge_center.png', outImage_edge_center)
 
     #Caso 6 :verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
@@ -346,28 +346,28 @@ def test_dilate():
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)
     outImage_default = dilate(inputImage, SE_square)
-    save_image_int(f'{image_name_ext}_default.png', outImage_default)
+    save_image(f'{image_name_ext}_default.png', outImage_default)
 
     #Caso 2 :dilatación con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)  # EE horizontal de 1x3
     outImage_1x3 = dilate(inputImage, SE_1x3)
     #visualize_image(image_name_ext, outImage_1x3)
-    save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
+    save_image(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :dilatación con un SE vertical 3x1 y centro predeterminado
     SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)  # EE vertical de 3x1
     outImage_3x1 = dilate(inputImage, SE_3x1)
-    save_image_int(f'{image_name_ext}_3x1.png', outImage_3x1)
+    save_image(f'{image_name_ext}_3x1.png', outImage_3x1)
 
     #Caso 4 :dilatación con un SE cuadrado 3x3 y un centro personalizado
     custom_center = [1, 1]
     outImage_custom_center = dilate(inputImage, SE_square, center=custom_center)
-    save_image_int(f'{image_name_ext}_custom_center.png', outImage_custom_center)
+    save_image(f'{image_name_ext}_custom_center.png', outImage_custom_center)
 
     #Caso 5 :dilatación con un SE 3x3 y un centro en la esquina inferior derecha
     custom_center_edge = [2, 2]
     outImage_edge_center = dilate(inputImage, SE_square, center=custom_center_edge)
-    save_image_int(f'{image_name_ext}_edge_center.png', outImage_edge_center)
+    save_image(f'{image_name_ext}_edge_center.png', outImage_edge_center)
 
     #Caso 6 :verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
@@ -441,28 +441,28 @@ def test_opening():
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)
     outImage_default = opening(inputImage, SE_square)
-    save_image_int(f'{image_name_ext}_default.png', outImage_default)
+    save_image(f'{image_name_ext}_default.png', outImage_default)
 
     #Caso 2 :opening con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = opening(inputImage, SE_1x3)
     #visualize_image(image_name_ext, outImage_1x3)
-    save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
+    save_image(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :opening con un SE vertical 3x1 y centro predeterminado
     SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)
     outImage_3x1 = opening(inputImage, SE_3x1)
-    save_image_int(f'{image_name_ext}_3x1.png', outImage_3x1)
+    save_image(f'{image_name_ext}_3x1.png', outImage_3x1)
 
     #Caso 4 :opening con un SE cuadrado 3x3 y un centro personalizado
     custom_center = [1, 1]
     outImage_custom_center = opening(inputImage, SE_square, center=custom_center)
-    save_image_int(f'{image_name_ext}_custom_center.png', outImage_custom_center)
+    save_image(f'{image_name_ext}_custom_center.png', outImage_custom_center)
 
     #Caso 5 :opening con un SE 3x3 y un centro en la esquina inferior derecha
     custom_center_edge = [2, 2]
     outImage_edge_center = opening(inputImage, SE_square, center=custom_center_edge)
-    save_image_int(f'{image_name_ext}_edge_center.png', outImage_edge_center)
+    save_image(f'{image_name_ext}_edge_center.png', outImage_edge_center)
 
     #Caso 6: Verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
@@ -493,28 +493,28 @@ def test_closing():
                           [1, 1, 1],
                           [1, 1, 1]], dtype=np.uint8)
     outImage_default = closing(inputImage, SE_square)
-    save_image_int(f'{image_name_ext}_default.png', outImage_default)
+    save_image(f'{image_name_ext}_default.png', outImage_default)
 
     #Caso 2 :closing con un SE horizontal 1x3 y centro predeterminado
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     outImage_1x3 = closing(inputImage, SE_1x3)
     #visualize_image(image_name_ext, outImage_1x3)
-    save_image_int(f'{image_name_ext}_1x3.png', outImage_1x3)
+    save_image(f'{image_name_ext}_1x3.png', outImage_1x3)
 
     #Caso 3 :closing con un SE vertical 3x1 y centro predeterminado
     SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)
     outImage_3x1 = closing(inputImage, SE_3x1)
-    save_image_int(f'{image_name_ext}_3x1.png', outImage_3x1)
+    save_image(f'{image_name_ext}_3x1.png', outImage_3x1)
 
     #Caso 4 :closing con un EE cuadrado 3x3 y un centro personalizado
     custom_center = [1, 1]
     outImage_custom_center = closing(inputImage, SE_square, center=custom_center)
-    save_image_int(f'{image_name_ext}_custom_center.png', outImage_custom_center)
+    save_image(f'{image_name_ext}_custom_center.png', outImage_custom_center)
 
     #Caso 5 :closing con un EE 3x3 y un centro en la esquina inferior derecha
     custom_center_edge = [2, 2]
     outImage_edge_center = closing(inputImage, SE_square, center=custom_center_edge)
-    save_image_int(f'{image_name_ext}_edge_center.png', outImage_edge_center)
+    save_image(f'{image_name_ext}_edge_center.png', outImage_edge_center)
 
     #Caso 6 :verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
@@ -544,29 +544,29 @@ def test_fill():
     seeds = [(13, 9)]
     outImage_default = fill(inputImage, seeds)
     #visualize_image(image_name_ext,outImage_default)
-    save_image_int(f'{image_name_ext}_fill_default.png', outImage_default)
+    save_image(f'{image_name_ext}_fill_default.png', outImage_default)
 
     #Caso 2 :fill con varias semillas en diferentes agujeros de la letra 'B'
     seeds_multiple = [(14,9), (7,9)]
     outImage_multiple_seeds = fill(inputImage, seeds_multiple)
-    save_image_int(f'{image_name_ext}_fill_multiple_seeds.png', outImage_multiple_seeds)
+    save_image(f'{image_name_ext}_fill_multiple_seeds.png', outImage_multiple_seeds)
     
     #Caso 3 :fill con un SE horizontal de 1x3
     SE_1x3 = np.array([[1, 1, 1]], dtype=np.uint8)
     seeds = [(13, 9)]
     outImage_1x3 = fill(inputImage, seeds, SE=SE_1x3)
-    save_image_int(f'{image_name_ext}_fill_1x3.png', outImage_1x3)
+    save_image(f'{image_name_ext}_fill_1x3.png', outImage_1x3)
     
     #Caso 4 :fill con un SE vertical 3x1
     SE_3x1 = np.array([[1], [1], [1]], dtype=np.uint8)
     outImage_3x1 = fill(inputImage, seeds, SE=SE_3x1)
-    save_image_int(f'{image_name_ext}_fill_3x1.png', outImage_3x1)
+    save_image(f'{image_name_ext}_fill_3x1.png', outImage_3x1)
     
     #Caso 5 :fill con un SE cuadrado 3x3 y un centro personalizado
     SE_square = np.ones((3, 3), dtype=np.uint8)
     custom_center = [0, 2]
     outImage_custom_center = fill(inputImage, seeds, SE=SE_square, center=custom_center)
-    save_image_int(f'{image_name_ext}_fill_custom_center.png', outImage_custom_center)
+    save_image(f'{image_name_ext}_fill_custom_center.png', outImage_custom_center)
     
     #Caso 6 :verificar que se lanza un ValueError cuando el centro está fuera de los límites
     try:
@@ -597,29 +597,29 @@ def test_gradientImage():
     gx_roberts = np.clip(gx_roberts,0,1)
     gy_roberts = np.clip(gy_roberts,0,1)
     #visualize_image(image_name_ext,gx_roberts)
-    save_image_int(f'{image_name_ext}_gradient_roberts_gx.png', gx_roberts)
-    save_image_int(f'{image_name_ext}_gradient_roberts_gy.png', gy_roberts)
+    save_image(f'{image_name_ext}_gradient_roberts_gx.png', gx_roberts)
+    save_image(f'{image_name_ext}_gradient_roberts_gy.png', gy_roberts)
 
     #Caso 2 : CentralDiff
     gx_central, gy_central = gradientImage(inputImage, 'CentralDiff')
     gx_central = np.clip(gx_central,0,1)
     gy_central = np.clip(gy_central, 0,1)
-    save_image_int(f'{image_name_ext}_gradient_central_gx.png', gx_central)
-    save_image_int(f'{image_name_ext}_gradient_central_gy.png', gy_central)
+    save_image(f'{image_name_ext}_gradient_central_gx.png', gx_central)
+    save_image(f'{image_name_ext}_gradient_central_gy.png', gy_central)
 
     #Caso 3 : Prewitt
     gx_prewitt, gy_prewitt = gradientImage(inputImage, 'Prewitt')
     gx_prewitt = np.clip(gx_prewitt,0,1)
     gy_prewitt = np.clip(gy_prewitt,0,1)
-    save_image_int(f'{image_name_ext}_gradient_prewitt_gx.png', gx_prewitt)
-    save_image_int(f'{image_name_ext}_gradient_prewitt_gy.png', gy_prewitt)
+    save_image(f'{image_name_ext}_gradient_prewitt_gx.png', gx_prewitt)
+    save_image(f'{image_name_ext}_gradient_prewitt_gy.png', gy_prewitt)
 
     #Caso 4 : Sobel
     gx_sobel, gy_sobel = gradientImage(inputImage, 'Sobel')
     gx_sobel = np.clip(gx_sobel,0,1)
     gy_sobel = np.clip(gy_sobel,0,1)
-    save_image_int(f'{image_name_ext}_gradient_sobel_gx.png', gx_sobel)
-    save_image_int(f'{image_name_ext}_gradient_sobel_gy.png', gy_sobel)
+    save_image(f'{image_name_ext}_gradient_sobel_gx.png', gx_sobel)
+    save_image(f'{image_name_ext}_gradient_sobel_gy.png', gy_sobel)
 
     #Caso 5 :verificar que se lanza un ValueError para un operador no válido
     try:
@@ -644,12 +644,12 @@ def check_gradients():
         sobel = np.sqrt(gx_sobel**2 + gy_sobel**2)
         canny = edgeCanny(img, 0.8, 0.1, 0.3)
         log = LoG(img, 0.8)
-        save_image_int(f'{image_name_ext}_Roberts.png', roberts)
-        save_image_int(f'{image_name_ext}_Central.png', central)
-        save_image_int(f'{image_name_ext}_Prewitt.png', prewitt)
-        save_image_int(f'{image_name_ext}_Sobel.png', sobel)
-        save_image_int(f'{image_name_ext}_Canny.png', canny)
-        save_image_int(f'{image_name_ext}_Log.png', adjustIntensity(log))
+        save_image(f'{image_name_ext}_Roberts.png', roberts)
+        save_image(f'{image_name_ext}_Central.png', central)
+        save_image(f'{image_name_ext}_Prewitt.png', prewitt)
+        save_image(f'{image_name_ext}_Sobel.png', sobel)
+        save_image(f'{image_name_ext}_Canny.png', canny)
+        save_image(f'{image_name_ext}_Log.png', adjustIntensity(log))
 
 def test_LoG():
 
@@ -663,19 +663,19 @@ def test_LoG():
     outImage_sigma_1 = LoG(inputImage, sigma_1)
     outImage_sigma_1 = adjustIntensity(outImage_sigma_1)
     #visualize_image(image_name_ext,outImage_sigma_1)
-    save_image_int(f'{image_name_ext}_LoG_sigma_{sigma_1}.png', outImage_sigma_1)
+    save_image(f'{image_name_ext}_LoG_sigma_{sigma_1}.png', outImage_sigma_1)
 
     #Caso 2 :sigma 1.2
     sigma_2 = 1.2
     outImage_sigma_2 = LoG(inputImage, sigma_2)
     #outImage_sigma_2 = adjustIntensity(outImage_sigma_2)
-    save_image_int(f'{image_name_ext}_LoG_sigma_{sigma_2}.png', outImage_sigma_2)
+    save_image(f'{image_name_ext}_LoG_sigma_{sigma_2}.png', outImage_sigma_2)
 
     #Caso 3:sigma 3.0
     sigma_3 = 3.0
     outImage_sigma_3 = LoG(inputImage, sigma_3)
     #outImage_sigma_3 = adjustIntensity(outImage_sigma_3)
-    save_image_int(f'{image_name_ext}_LoG_sigma_{sigma_3}.png', outImage_sigma_3)
+    save_image(f'{image_name_ext}_LoG_sigma_{sigma_3}.png', outImage_sigma_3)
 
     #Caso 4 :verificar que se lanza un ValueError cuando sigma es <= 0
     try:
@@ -707,7 +707,7 @@ def test_edgeCanny():
 
         outImage = edgeCanny(inputImage, sigma, tlow, thigh)
         #visualize_image(image_name_ext, outImage)
-        save_image_int(f'{image_name_ext}_{output_filename}', outImage)
+        save_image(f'{image_name_ext}_{output_filename}', outImage)
 
     #Caso 7 :verificar que se lanza un ValueError cuando thigh < tlow
     try:
