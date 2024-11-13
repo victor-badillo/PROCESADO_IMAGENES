@@ -357,6 +357,49 @@ def test_dilate():
     except ValueError as e:
         print(f"Prueba pasada: {e}")
 
+
+    #Caso 8 y 9: dilatación de example_slides con SE_1x3_cero y SE_1x2 y centro en (0,0)
+    example_slides = np.array([
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [0, 1, 1, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+    ], dtype=np.uint8)
+
+    SE_1x3_cero = np.array([[1, 0, 1]], dtype=np.uint8)
+    outImage_slides_1x3 = dilate(example_slides, SE_1x3_cero)
+    SE_1x2 = np.array([[1, 1]], dtype=np.uint8)
+    outImage_slides_1x2_center = dilate(example_slides, SE_1x2, center=(0,0))
+
+    # Resultados esperados
+    expected_output_1x3 = np.array([
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [1, 1, 1, 1],
+        [1, 0, 1, 0],
+        [1, 0, 1, 0]
+    ], dtype=np.uint8)
+
+    expected_output_1x2 = np.array([
+        [1, 1, 0, 0],
+        [1, 1, 0, 0],
+        [0, 1, 1, 1],
+        [0, 1, 1, 0],
+        [0, 1, 1, 0]
+    ], dtype=np.uint8)
+
+    # Verificar que la salida sea igual al resultado esperado
+    if np.array_equal(outImage_slides_1x3, expected_output_1x3):
+        print("Prueba pasada: El resultado es el esperado para example_slides con SE_1x3_cero.")
+    else:
+        print("Prueba fallida: La salida no coincide con el resultado esperado.")
+
+    if np.array_equal(outImage_slides_1x2_center, expected_output_1x2):
+        print("Prueba pasada: El resultado es el esperado para example_slides con SE_1x2 y centro en (0,0).")
+    else:
+        print("Prueba fallida: La salida no coincide con el resultado esperado.")
+
     print("Todas las pruebas de dilatación han pasado con éxito.")
 
 
@@ -658,7 +701,7 @@ if __name__ == "__main__":
     #test_gaussianFilter()
     #test_medianFilter()
     #test_erode()
-    #test_dilate()
+    test_dilate()
     #test_opening()
     #test_closing()
     #test_fill()
@@ -667,4 +710,4 @@ if __name__ == "__main__":
     #test_edgeCanny()
     #check_histogramas()
     #check_filtrado()
-    check_gradients()
+    #check_gradients()
