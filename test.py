@@ -68,18 +68,6 @@ def test_equalize_intensity():
 
     print("Las imágenes ecualizadas han sido guardadas con éxito.")
 
-def check_histogramas():
-    
-    for image in os.listdir(INPUT_IMAGES):
-        image_name = os.path.basename(INPUT_IMAGES + image)
-        image_name_ext = os.path.splitext(image_name)[0]
-        img = load_image(image_name)
-        dark_image = adjustIntensity(img, [], [0, 0.5])
-        light_image = adjustIntensity(img, [], [0.5, 1])
-        equalized_image = equalizeIntensity(img)
-        save_image(f'{image_name_ext}_adjust_dark.png', dark_image)
-        save_image(f'{image_name_ext}_adjust_light.png', light_image)
-        save_image(f'{image_name_ext}_equalized.png', equalized_image)
     
 def test_filterImage():
 
@@ -726,7 +714,7 @@ if __name__ == "__main__":
     #test_gaussKernel1D()
     #test_gaussianFilter()
     #test_medianFilter()
-    test_erode()
+    #test_erode()
     #test_dilate()
     #test_opening()
     #test_closing()
@@ -734,6 +722,5 @@ if __name__ == "__main__":
     #test_gradientImage()
     #test_LoG()
     #test_edgeCanny()
-    #check_histogramas()
     #check_filtrado()
     #check_gradients()
