@@ -1,5 +1,6 @@
 import numpy as np
 from src.operaciones import filterImage, gaussianFilter
+
 '''
 Implementar una función que permita obtener las componentes Gx y Gy del gradiente de una
 imagen, pudiendo elegir entre los operadores de Roberts, CentralDiff (Diferencias centrales
@@ -58,6 +59,7 @@ outImage = LoG (inImage, sigma)
 '''
 def LoG(inImage, sigma):
 
+    #Revisar que el valor de sigma sea coherente
     if sigma <= 0:
         raise ValueError('El valor de sigma debe ser mayor que 0')
 
@@ -68,17 +70,16 @@ def LoG(inImage, sigma):
 
     for x in range(N):
         for y in range(N):
-            # Coordenadas relativas al centro
-            x_dist = x - center
-            y_dist = y - center
-            # Fórmula de LoG
-            kernel[x, y] = ((x_dist**2 + y_dist**2 - sigma**2) / sigma**4) * np.exp(-(x_dist**2 + y_dist**2) / (2 * sigma**2))
+
+            x_cent = x - center
+            y_cent = y - center
+            #Formula
+            kernel[x, y] = ((x_cent**2 + y_cent**2 - sigma**2) / sigma**4) * np.exp(-(x_cent**2 + y_cent**2) / (2 * sigma**2))
     
     # Normalizar el kernel para que la suma sea aproximadamente cero
     kernel -= kernel.mean()
-    #kernel /= np.sum(kernel)
 
-    #Convolucionar la imagen con el kernel calculado, sombrero mexicano
+    #Convolucionar la imagen con el kernel calculado, forma de sombrero mexicano
     outImage = filterImage(inImage, kernel)
 
     return outImage
@@ -112,7 +113,6 @@ def edgeCanny(inImage, sigma, tlow, thigh):
     nms_image = np.zeros_like(magnitude, dtype=np.float64)
     rows, cols = magnitude.shape
 
-
     #Bucle con indices adecuados para no situarse en los bordes de la imagen
     for i in range(1, rows - 1):
         for j in range(1, cols - 1):
@@ -136,13 +136,13 @@ def edgeCanny(inImage, sigma, tlow, thigh):
     #Obtener los bordes debiles
     weak_edges = ((nms_image > tlow) & (nms_image <= thigh))
 
-    #Marcas bordes fuertes
+    #Marcas bordes fuertes en la imagen de salida
     outImage = (nms_image > thigh).astype(np.float64) #Float64 para seguir patron de salida
 
     #Visitados
     visited = np.zeros_like(nms_image, dtype=bool)
 
-    #Coordenadas para mirar alrededor de una coordenada
+    #Coordenadas para mirar alrededor de un pixel
     surrounding = [(-1, -1), (-1, 0), (-1, 1),(0, -1),(0, 1),(1, -1), (1, 0), (1, 1)]
 
     while True:
@@ -159,13 +159,13 @@ def edgeCanny(inImage, sigma, tlow, thigh):
                     visited[i,j] = True
 
                     for offset_i,  offset_j in surrounding:
-                        ni, nj = i + offset_i, j + offset_j
+                        ni, nj = i + offset_i, j + offset_j #Coordenadas del vecino
 
                         #Si la coordenada vecina es un borde debil marcar esa coordenada como borde fuerte
                         if weak_edges[ni, nj] == 1:
                             outImage[ni, nj] = 1.0
 
-        #Para de iterar cuando no hay mas cambios iterando
+        #Para de iterar cuando no hay mas cambios
         if np.array_equal(outImage, prev_outImage):
             break
         

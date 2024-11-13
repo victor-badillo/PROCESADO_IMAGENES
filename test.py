@@ -557,7 +557,7 @@ def test_fill():
 
 def test_gradientImage():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'circleWhite.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'circles.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
     inputImage = load_image(image_name)
@@ -595,9 +595,9 @@ def test_gradientImage():
     try:
         gradientImage(inputImage, 'InvalidOperator')
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
-    print("Todas las pruebas de gradientImage han pasado con éxito.")
+    print("Todos los tests de gradientImage han pasado con éxito.")
 
 def check_gradients():
     for image in os.listdir(INPUT_IMAGES):
@@ -623,7 +623,7 @@ def check_gradients():
 
 def test_LoG():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'lena.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'circles.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
     inputImage = load_image(image_name)
@@ -631,7 +631,7 @@ def test_LoG():
     #Caso 1 :sigma 0.5
     sigma_1 = 0.5
     outImage_sigma_1 = LoG(inputImage, sigma_1)
-    outImage_sigma_1 = adjustIntensity(outImage_sigma_1)
+    #outImage_sigma_1 = adjustIntensity(outImage_sigma_1)
     #visualize_image(image_name_ext,outImage_sigma_1)
     save_image(f'{image_name_ext}_LoG_sigma_{sigma_1}.png', outImage_sigma_1)
 
@@ -652,14 +652,14 @@ def test_LoG():
         invalid_sigma = -1
         out_image_error = LoG(inputImage, invalid_sigma)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
-    print("Todas las pruebas de LoG han pasado con éxito.")
+    print("Todos los tests de LoG han pasado con éxito.")
 
 
 def test_edgeCanny():
 
-    image_name = os.path.basename(INPUT_IMAGES + 'lena.png')
+    image_name = os.path.basename(INPUT_IMAGES + 'circles.png')
     image_name_ext = os.path.splitext(image_name)[0]
 
     inputImage = load_image(image_name)
@@ -683,10 +683,10 @@ def test_edgeCanny():
     try:
         out_image_error = edgeCanny(inputImage, 1.0, 0.5, 0.1)
     except ValueError as e:
-        print(f"Prueba pasada: {e}")
+        print(f"Prueba pasada con éxito: {e}")
 
 
-    print("Todas las pruebas de edgeCanny han pasado con éxito.")
+    print("Todos los tests de edgeCanny han pasado con éxito.")
 
 
 if __name__ == "__main__":
@@ -700,8 +700,8 @@ if __name__ == "__main__":
     #test_dilate()
     #test_opening()
     #test_closing()
-    test_fill()
+    #test_fill()
     #test_gradientImage()
-    #test_LoG()
+    test_LoG()
     #test_edgeCanny()
     #check_gradients()
