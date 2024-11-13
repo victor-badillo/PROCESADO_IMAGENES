@@ -44,19 +44,6 @@ def save_image_int(image_name, image):
         print("Error al guardar la imagen ==>" + img_path)
 
 
-'''
-Funcion para guardar imagen, imagen [0,1]
-'''
-def save_image_float(image_name, image):
-
-    img_path = OUTPUT_IMAGES + image_name
-    success = cv2.imwrite(img_path,image)
-
-    if success:
-        print("La imagen ==> " + image_name + " ==> se guardó correctamente.")
-    else:
-        print("Error al guardar la imagen ==>" + img_path)
-
 
 '''
 Función para calcular el histograma de una imagen de forma manual

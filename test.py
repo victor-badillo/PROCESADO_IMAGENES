@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from utilidades import load_image, save_image_int, save_image_float, visualize_image_float
+from utilidades import load_image, save_image_int, visualize_image_float
 from src import adjustIntensity, equalizeIntensity, filterImage, gaussKernel1D, gaussianFilter, medianFilter, erode, dilate, opening, closing, fill, gradientImage, LoG, edgeCanny
 from configuracion import INPUT_IMAGES
 import cv2
