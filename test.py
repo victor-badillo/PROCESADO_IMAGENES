@@ -599,27 +599,6 @@ def test_gradientImage():
 
     print("Todos los tests de gradientImage han pasado con éxito.")
 
-def check_gradients():
-    for image in os.listdir(INPUT_IMAGES):
-        image_name = os.path.basename(INPUT_IMAGES + image)
-        image_name_ext = os.path.splitext(image_name)[0]
-        img = load_image(image_name)
-        gx_roberts, gy_roberts = gradientImage(img, 'Roberts')
-        gx_central, gy_central = gradientImage(img, 'CentralDiff')
-        gx_prewitt, gy_prewitt = gradientImage(img, 'Prewitt')
-        gx_sobel, gy_sobel = gradientImage(img, 'Sobel')
-        roberts = np.sqrt(gx_roberts**2 + gy_roberts**2)
-        central = np.sqrt(gx_central**2 + gy_central**2)
-        prewitt = np.sqrt(gx_prewitt**2 + gy_prewitt**2)
-        sobel = np.sqrt(gx_sobel**2 + gy_sobel**2)
-        canny = edgeCanny(img, 0.8, 0.1, 0.3)
-        log = LoG(img, 0.8)
-        save_image(f'{image_name_ext}_Roberts.png', roberts)
-        save_image(f'{image_name_ext}_Central.png', central)
-        save_image(f'{image_name_ext}_Prewitt.png', prewitt)
-        save_image(f'{image_name_ext}_Sobel.png', sobel)
-        save_image(f'{image_name_ext}_Canny.png', canny)
-        save_image(f'{image_name_ext}_Log.png', adjustIntensity(log))
 
 def test_LoG():
 
@@ -702,6 +681,5 @@ if __name__ == "__main__":
     #test_closing()
     #test_fill()
     #test_gradientImage()
-    test_LoG()
-    #test_edgeCanny()
-    #check_gradients()
+    #test_LoG()
+    test_edgeCanny()
